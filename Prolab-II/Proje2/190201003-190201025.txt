@@ -1,0 +1,545 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <SPI.h>
+#include <SD.h>
+#include <LiquidCrystal.h>
+
+File myFile;
+const int rs = 9, en = 6, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+int durdurgurkan=0;
+struct Hizmet{
+      int HizmetID;
+      char HizmetAd[20];
+      int KalanHizmetAdet;  
+      int HizmetFiyat;
+  };
+
+Hizmet kopuk;
+Hizmet yikama;
+Hizmet kurulama;
+Hizmet cilalama;
+char dosyaStringi[110];
+int geciciDurdur=0;
+int nereyeAtiyim=0;
+char tmpString[15];
+char tmpEleman;
+int asama = 1;
+int randomOlsun = 1;
+int yuklenenPara = 0;
+int islemTutari = 0;
+char paraUstu[20];
+char secilenIslem[20];
+char miktar[10];
+bool flag = true;
+int beslik;
+int onluk;
+int yirmilik;
+int ellilik;
+int yuzluk;
+//random sayı üretici.
+int randomSayi;
+//resetlemek icin gerekenler:
+int bBeslik; 
+int bOnluk;
+int bYirmilik;
+int bEllilik;
+int bYuzluk;
+int bC;
+int bK;
+int bY;
+int bKo; 
+void setup() {
+  // put your setup code here, to run once:
+  
+  Serial.begin(9600);
+  while (!Serial) {
+    ; 
+  }
+ 
+  Serial.print("SD card Baslatiliyor ...");
+ 
+  if (!SD.begin()) {
+    Serial.println("Baslatma basarisiz!");
+    while (1);
+  }
+  Serial.println("Baslatma bitirildi.");
+ 
+  myFile = SD.open("hizmet.txt");
+  if (myFile) {
+    Serial.println("hizmet.txt:");
+    int i=0;
+    
+    while (myFile.available()) {
+       tmpEleman=myFile.read();
+      
+      if(nereyeAtiyim==1){
+        beslik=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      }else if(nereyeAtiyim==3){
+        onluk=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==5){
+        yirmilik=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==7){
+        ellilik=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==9){
+        yuzluk=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } 
+      //HIZMETLER
+      //1. HIZMET
+      else if(nereyeAtiyim==11){
+        kopuk.HizmetID=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==13){
+        strcpy(kopuk.HizmetAd,tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==15){
+        kopuk.KalanHizmetAdet=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==17){
+        kopuk.HizmetFiyat=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } 
+      //2. HIZMET
+      else if(nereyeAtiyim==19){
+        yikama.HizmetID=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==21){
+        strcpy(yikama.HizmetAd,tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==23){
+        yikama.KalanHizmetAdet=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==25){
+        yikama.HizmetFiyat=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      }
+      //3. HIZMET
+      else if(nereyeAtiyim==27){
+        kurulama.HizmetID=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==29){
+        strcpy(kurulama.HizmetAd,tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==31){
+        kurulama.KalanHizmetAdet=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==33){
+        kurulama.HizmetFiyat=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      }
+      //4. HIZMET
+      else if(nereyeAtiyim==35){
+        cilalama.HizmetID=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==37){
+        strcpy(cilalama.HizmetAd,tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==39){
+        cilalama.KalanHizmetAdet=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      } else if(nereyeAtiyim==41){
+        cilalama.HizmetFiyat=atoi(tmpString);
+        i=0;
+        memset(tmpString,0,strlen(tmpString));
+        nereyeAtiyim++;
+      }
+      
+      
+     
+       if(tmpEleman==',' || tmpEleman=='\n'){
+        nereyeAtiyim++;
+      }
+      else{
+      tmpString[i]=tmpEleman;
+      i++;
+      }      
+      
+
+      
+    }
+    
+    myFile.close();
+  } else {
+    Serial.println("hizmet.txt acarken hata olustu");
+  }
+
+    Serial.println(cilalama.HizmetAd);
+    lcd.begin(20, 4);
+    pinMode(2, OUTPUT);
+    pinMode(3, OUTPUT);
+    pinMode(4, OUTPUT);
+    pinMode(5, OUTPUT);
+    pinMode(8, OUTPUT);
+    pinMode(7, OUTPUT);
+
+    //metin belgesinden okunan degerlerin atanmasi
+    bBeslik = beslik;
+    bOnluk = onluk;
+    bYirmilik = yirmilik;
+    bEllilik = ellilik;
+    bYuzluk = yuzluk;
+    bC=cilalama.KalanHizmetAdet;
+    bK=kurulama.KalanHizmetAdet;
+    bY=yikama.KalanHizmetAdet;
+    bKo=kopuk.KalanHizmetAdet;
+    
+}
+void resetle(){
+  beslik = bBeslik;
+  onluk = bOnluk;
+  yirmilik = bYirmilik;
+  ellilik = bEllilik;
+  yuzluk = bYuzluk;
+  cilalama.KalanHizmetAdet=bC;
+  kurulama.KalanHizmetAdet=bK;
+  yikama.KalanHizmetAdet=bY;
+  kopuk.KalanHizmetAdet=bK;
+}
+void resetleHizmet(){
+  cilalama.KalanHizmetAdet=bC;
+  kurulama.KalanHizmetAdet=bK;
+  yikama.KalanHizmetAdet=bY;
+  kopuk.KalanHizmetAdet=bK;
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+ 
+  char lcdOutput[30];
+  char asamaSeviyesi[8];
+  int bt1 = digitalRead(A0);
+  int bt2 = digitalRead(A1);
+  int bt3 = digitalRead(A2);
+  int bt4 = digitalRead(A3);
+  int bt5 = digitalRead(A4);
+  int bt6 = digitalRead(A5);
+  int bt7 = digitalRead(0);
+  lcd.setCursor(0, 1);
+  
+  if(asama == 1){
+    digitalWrite(7,LOW);
+    randomOlsun = 1;
+    //buton1 e basma
+    if(bt1 == HIGH && durdurgurkan==0) {    
+        durdurgurkan=1; 
+        yuklenenPara +=5;
+        beslik++;
+    }
+ 
+    //buton2 e basma
+    else if(bt2 == HIGH && durdurgurkan==0) {    
+        durdurgurkan=1; 
+        yuklenenPara +=10;
+        onluk++;
+    }
+   
+    //buton3 e basma
+    else if(bt3 == HIGH && durdurgurkan==0) {    
+        durdurgurkan=1; 
+        yuklenenPara += 20;
+        yirmilik++;
+    }
+   
+
+    //buton4 e basma
+    else if(bt4 == HIGH && durdurgurkan==0) {    
+        durdurgurkan=1; 
+        yuklenenPara += 50;
+        ellilik++;   
+    }
+   
+
+    //buton5 e basma
+    else if(bt5 == HIGH && durdurgurkan==0) {    
+        durdurgurkan=1; 
+        yuklenenPara +=100;
+        yuzluk++;
+    }
+   
+
+    //buton6 e basma
+    else if(bt6 == HIGH && durdurgurkan==0) {    
+        durdurgurkan=1; 
+        asama=2;
+        lcd.clear();   
+    }
+    
+
+    //buton7 e basma
+    else if(bt7 == HIGH && durdurgurkan==0) {    
+        durdurgurkan=1;
+        resetle();
+        yuklenenPara = 0;
+        lcd.clear();
+    }
+  
+    else if(durdurgurkan==1 && bt1==LOW && bt2==LOW && bt3==LOW && bt4==LOW && bt5==LOW && bt6==LOW && bt7==LOW){
+      durdurgurkan=0;
+      //lcd.print("hadee1");
+      
+    }
+    sprintf(lcdOutput, "%d TL para attiniz",yuklenenPara);
+    sprintf(asamaSeviyesi, "Asama 1");
+    //sürekli yazmaları için dışarı alnıdı!
+    lcd.setCursor(0,0);
+    lcd.print(asamaSeviyesi);
+    lcd.setCursor(0,1);
+    lcd.print(lcdOutput);
+    
+    
+  }
+  //hizmetSecim
+  else if(asama == 2){
+
+    //kopuk
+    if(bt1 == HIGH && durdurgurkan == 0){
+      kopuk.KalanHizmetAdet--;
+      islemTutari += kopuk.HizmetFiyat;
+      durdurgurkan = 1;
+      sprintf(secilenIslem,"%s islemi",kopuk.HizmetAd);
+    }
+    //yikama
+    else if(bt2 == HIGH && durdurgurkan == 0){
+      yikama.KalanHizmetAdet--;
+      islemTutari += yikama.HizmetFiyat;
+      durdurgurkan = 1;
+      sprintf(secilenIslem,"%s islemi   ",yikama.HizmetAd);
+    }
+    //kurulama
+    else if(bt3 == HIGH && durdurgurkan == 0){
+      kurulama.KalanHizmetAdet--;
+      islemTutari += kurulama.HizmetFiyat;  
+      durdurgurkan = 1;
+      sprintf(secilenIslem,"%s islemi   ",kurulama.HizmetAd);
+    }
+    //cilalama
+    else if(bt4 == HIGH && durdurgurkan == 0){
+      cilalama.KalanHizmetAdet--;
+      islemTutari += cilalama.HizmetFiyat;
+      durdurgurkan = 1;
+      sprintf(secilenIslem,"%s islemi   ",cilalama.HizmetAd);
+    }
+    //bitis
+    else if(bt5 == HIGH && durdurgurkan == 0){
+      asama=3;
+      durdurgurkan = 1;
+      memset(secilenIslem,0,strlen(secilenIslem));
+      memset(asamaSeviyesi,0,strlen(asamaSeviyesi));
+      lcd.clear();
+    }
+    //reset(sadece buradaki seçimler)
+    else if(bt6 == HIGH && durdurgurkan == 0){
+      
+      durdurgurkan = 1;
+      islemTutari = 0;
+      lcd.clear();
+      resetleHizmet();// islemlerin adedinin eski degerleri girilir
+      sprintf(secilenIslem,"");
+      
+      
+    }
+    //komple reset
+    else if(bt7 == HIGH && durdurgurkan==0){
+      lcd.clear();
+      digitalWrite(7,LOW);
+      yuklenenPara=0;
+      asama=1;
+      resetle(); 
+      durdurgurkan = 1;
+      memset(secilenIslem,0,strlen(secilenIslem));
+      memset(asamaSeviyesi,0,strlen(asamaSeviyesi));
+      islemTutari=0;
+    }
+    
+    else if(durdurgurkan==1 && bt1==LOW && bt2==LOW && bt3==LOW && bt4==LOW && bt5==LOW && bt6==LOW){
+      durdurgurkan = 0;
+      sprintf(lcdOutput,"Islem tutariniz: %d ",islemTutari);
+      lcd.print(lcdOutput);
+      lcd.setCursor(0,0);
+      sprintf(asamaSeviyesi,"Asama %d",asama);
+      lcd.print(asamaSeviyesi);
+      lcd.setCursor(0,2);
+      //sprintf("%s",secilenIslem);
+      lcd.print(secilenIslem);
+      lcd.setCursor(0,1);
+    }
+    
+    
+    
+  }
+   //Paranin takilma durumu
+   else if(asama == 3){
+        if(randomOlsun == 1){
+          randomSeed(millis());
+          randomSayi=random(1,5);  
+          randomOlsun = 0;
+          Serial.println(randomSayi);
+        }
+        //PARA SIKISMA DURUMU: !! 
+        //randomSayi = 2;
+        if(randomSayi==2){
+         if(bt7==LOW){
+            lcd.setCursor(0,0);
+            lcd.print("Para Sikisti!    ");
+            lcd.setCursor(0,1);
+            lcd.print("Para Iadesi Yapildi");
+            lcd.setCursor(0,2);
+            lcd.print("Resetlemek Icin");
+            lcd.setCursor(0,3);
+            lcd.print("Reset Butonuna Basin");
+            digitalWrite(7,HIGH);
+            resetle();    
+         }
+         
+         //Resetleme butonu:
+         else if(bt7 == HIGH){
+            lcd.clear();
+            digitalWrite(7,LOW);
+            yuklenenPara=0;
+            islemTutari = 0;
+            asama=1; 
+            randomOlsun = 1;
+            durdurgurkan = 0;
+            memset(secilenIslem,0,strlen(secilenIslem));
+         }
+        
+        }
+        else{
+        digitalWrite(8,HIGH);
+        randomOlsun = 1;
+        asama=4;
+        }
+      
+    }
+   else if(asama == 4){
+      if(yuklenenPara >= islemTutari){
+        
+        int verilecekPara = yuklenenPara-islemTutari;
+        for(int i=verilecekPara; i > 0;){
+          if(i/100 > 0 && yuzluk - (i/100) >= 0){
+              yuzluk -= (i/100);
+              i = i%100;  
+          }
+          else if(i/50 > 0 && ellilik - (i/50) >= 0){
+            ellilik -= (i/50);
+            i = i%50;  
+          }
+          else if(i/20 > 0 && yirmilik - (i/20) >= 0){
+            yirmilik -= (i/20);
+            i = i%20;
+          }
+          else if(i/10 > 0 && onluk - (i/10) >= 0){
+            onluk -= (i/10);
+            i = i%10;
+          }
+          else if(i/5 > 0){
+            if(beslik - (i/5) >= 0){
+              beslik -= (i/5);
+              i = i%5;  
+            }
+            else{
+              flag = false;
+              break;
+            }
+          }
+        }
+        if(flag)
+          sprintf(paraUstu,"%d = Para ustunuz",verilecekPara);  
+        else{
+          sprintf(paraUstu,"Kasada para yok");
+          resetle();
+          yuklenenPara=0;
+        }
+      }
+      else{
+        lcd.clear();
+        sprintf(paraUstu,"Yetersiz bakiye");
+        resetle();
+        yuklenenPara=0;
+        delay(2000);
+        asama = 1;
+        // para yukleme kismina gidiyor
+        // yuklenen para sıfırlandı.
+      }
+      lcd.setCursor(0,0);
+      lcd.print(paraUstu);
+      //sprintf(miktar,"%d %d %d %d %d",beslik,onluk,yirmilik,ellilik,yuzluk);
+      //lcd.setCursor(0,1);
+      //lcd.print(miktar);
+      delay(3000);
+      lcd.clear();
+      asama = 5;
+      digitalWrite(8,LOW);
+    }
+    if(asama == 5){
+      sprintf(dosyaStringi,"%d,%d,%d,%d,%d\n%d,%s,%d,%d TL\n%d,%s,%d,%d TL\n%d,%s,%d,%d TL\n%d,%s,%d,%d TL\n ",beslik,onluk,yirmilik,ellilik,yuzluk,kopuk.HizmetID,kopuk.HizmetAd,kopuk.KalanHizmetAdet,kopuk.HizmetFiyat,yikama.HizmetID,yikama.HizmetAd,yikama.KalanHizmetAdet,yikama.HizmetFiyat,kurulama.HizmetID,kurulama.HizmetAd,kurulama.KalanHizmetAdet,kurulama.HizmetFiyat,cilalama.HizmetID,cilalama.HizmetAd,cilalama.KalanHizmetAdet,cilalama.HizmetFiyat);      
+      myFile = SD.open("hizmet.txt", FILE_WRITE);
+      if(myFile){
+        SD.remove("hizmet.txt");
+        myFile.close();
+      }
+      else{
+        Serial.println("Dosya acilamadi");
+      }
+      
+      myFile = SD.open("hizmet.txt", FILE_WRITE);
+      if(myFile){
+        myFile.print(dosyaStringi);
+        myFile.close();
+      }
+      else{
+        Serial.println("Dosya acilamadi");
+      }
+      yuklenenPara = 0;
+      islemTutari = 0;
+      memset(secilenIslem,0,strlen(secilenIslem)); 
+      asama = 1;   
+    }
+  }

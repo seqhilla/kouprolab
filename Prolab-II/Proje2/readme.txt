@@ -1,0 +1,2 @@
+Aldığımız not 96'ydı lcd ekrana iade edilen parayı yazdırmamızı istemişlerdi sanırım bilsek yazardık basit bir hata. Bu dönem uzaktan olduğundan ve derste işlediğimiz tiva kartına ulaşım zor olduğundan bu dönemlik ardiuno kullanabildik işimizi oldukça kolaylaştırdı biraz karışık görülebilir kısaca: 
+ Baglantilar.png de karta yapılacak bağlantılar görünmekte ProLab.pdsprj de Proteus üzerinde simulasyonda yaptığımız proje mevcut(sanırım esktra ardiuna kütüphanesi indirmiştik). sdcard_image.IMA ise projede sd carda koyduğumuz image dosyası çünkü dosyaya okuma yazma isteniyor.
