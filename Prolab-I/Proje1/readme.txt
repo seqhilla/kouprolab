@@ -1,0 +1,1 @@
+Bu projede herhangi bir sorun hatırlamıyorum kaç aldığımızı da fakat 90+ ya da 100 dür
