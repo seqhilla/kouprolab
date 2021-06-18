@@ -1,0 +1,2 @@
+Alınan not 90 bazı isterleri farketmeden karşılamamışız bir de bazı ufak buglar var bir de bir çok iyileştirme yapılabilirdi başta yazdığım şekilde bıraktım üşendim.
+İstedikleri şey ise sanatçıyı sildiğimde tüm şarkıları playlistlerden ve şarkılardan albümlerden vb silinmesiydi.
