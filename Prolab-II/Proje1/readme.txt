@@ -1,0 +1,1 @@
+Oldukça fazla bug vardı bazen takılıyordu falan fakat gene de yardımcı olur bazı konularda. Aldığımız not 90'dı.
