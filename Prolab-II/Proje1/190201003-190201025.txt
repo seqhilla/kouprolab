@@ -1,0 +1,2872 @@
+-----------------------------------------------------------------------------------------------
+package lab;
+
+import java.awt.Image;
+import java.util.TimerTask;
+import javax.swing.ImageIcon;
+
+public class Altin extends Obje{
+    private Image im;
+    private int x,y,tilex,tiley;
+    private int altinSayisi;
+    private int altinDegeri=5;
+
+    public int getAltinDegeri() {
+        return altinDegeri;
+    }
+
+    public void setAltinDegeri(int altinDegeri) {
+        this.altinDegeri = altinDegeri;
+    }
+    public int getAltinSayisi() {
+        return altinSayisi;
+    }
+
+    public void setAltinSayisi(int altinSayisi) {
+        this.altinSayisi = altinSayisi;
+    }
+    
+    public Altin() {
+       ImageIcon img = new ImageIcon("altin.png"); 
+       im = img.getImage();
+       tilex = 6;
+       tiley = 5;
+       
+    }
+   
+
+    public Image getIm() {
+        return im;
+    }
+
+    public void setIm(Image im) {
+        this.im = im;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getTilex() {
+        return tilex;
+    }
+
+    public void setTilex(int tilex) {
+        this.tilex = tilex;
+    }
+
+    public int getTiley() {
+        return tiley;
+    }
+
+    public void setTiley(int tiley) {
+        this.tiley = tiley;
+    }
+    
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
+public class Azman extends Dusman {
+
+    private Image ima;
+    private int x, y;
+    private int azmanPuanDususu=5;
+
+    
+    private Timer t;
+
+    public Azman() {
+        t = new Timer();
+        ImageIcon imgg = new ImageIcon("azman.png");
+        ima = imgg.getImage();
+//      System.out.println("azman oluştu");
+        tilex = 3;
+        tiley = 0;
+
+        x = tilex * 55;
+        y = tiley * 55;
+        
+        
+    }
+    public int getAzmanPuanDususu() {
+        return azmanPuanDususu;
+    }
+
+    public void setAzmanPuanDususu(int azmanPuanDususu) {
+        this.azmanPuanDususu = azmanPuanDususu;
+    }
+    public Image getIma() {
+        return ima;
+    }
+
+    public void setIma(Image ima) {
+        this.ima = ima;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getTilex() {
+        return tilex;
+    }
+
+    public void setTilex(int tilex) {
+        this.tilex = tilex;
+    }
+
+    public int getTiley() {
+        return tiley;
+    }
+
+    public void setTiley(int tiley) {
+        this.tiley = tiley;
+    }
+
+    public Timer getT() {
+        return t;
+    }
+
+    public void setT(Timer t) {
+        this.t = t;
+    }
+   
+
+}
+
+-----------------------------------------------------------------------------------------------
+package lab;
+
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.TimerTask;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+public class Board extends JPanel implements ActionListener {
+
+    Random rand = new Random();
+    private Timer timer;
+    private Map m;
+    private ArrayList<Integer> yolGargamel11;
+    private ArrayList<Integer> yolAzman;
+    private int sirineX, aX, bX, cX, dX;
+    private int sirineY, aY, bY, cY, dY;
+    private GozlukluSirin gozluklu;
+    private TembelSirin tembel;
+    private Altin altin;
+    private Mantar mantar;
+    private int gozlukluArkasiX = 26666, gozlukluArkasiY = 26666;
+    private int secim;
+    private Azman azman;
+    private Gargamel gargamel;
+    private ImageIcon bitisFotoW = new ImageIcon("gazandik.jpg");
+    private ImageIcon bitisFotoL = new ImageIcon("gaybettik.jpg");
+    private java.util.Timer t;
+    private int random = rand.nextInt(11);
+    private int randomMantar = rand.nextInt(21);
+    private JLabel label;
+    private JLabel test;
+    private JLabel skorgosteren;
+    private ImageIcon altinn;
+    private int[] olusacakYerX = new int[6];
+    private int[] olusacakYerY = new int[6];
+    private GraphShow graph;
+
+
+    public Board() {
+
+        JLabel test = new JLabel();
+        this.add(test);
+        t = new java.util.Timer();
+        m = new Map();
+        gozluklu = new GozlukluSirin();
+        gargamel = new Gargamel();
+        tembel = new TembelSirin();
+        altin = new Altin();
+        mantar = new Mantar();
+        azman = new Azman();
+        yolGargamel11 = new ArrayList<>();
+        yolAzman = new ArrayList<>();
+        addKeyListener(new Al());
+        setFocusable(true);
+        skorgosteren = new JLabel();
+        skorgosteren.setFont(new Font("Times", Font.PLAIN, 20));
+        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+        skorgosteren.setBounds(450, 800, 200, 200);
+        this.add(skorgosteren);
+        timer = new Timer(25, this);
+        timer.start();
+    }
+
+    public Board(Map m) {
+        this.m = m;
+        JLabel test = new JLabel();
+        this.add(test);
+        t = new java.util.Timer();
+        gozluklu = new GozlukluSirin();
+        gargamel = new Gargamel();
+        tembel = new TembelSirin();
+        altin = new Altin();
+        mantar = new Mantar();
+        azman = new Azman();
+        yolGargamel11 = new ArrayList<>();
+        yolAzman = new ArrayList<>();
+        addKeyListener(new Al());
+        setFocusable(true);
+        skorgosteren = new JLabel();
+        skorgosteren.setFont(new Font("Times", Font.PLAIN, 20));
+        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+        skorgosteren.setBounds(450, 800, 200, 200);
+        this.add(skorgosteren);
+        timer = new Timer(25, this);
+        timer.start();
+    }
+    
+    int time = 0;
+
+    int duration = 200;
+    Map ma = new Map();
+    int geciciRandomX;
+    int geciciRandomY;
+    int cevap;
+    int i = 0;
+    int durlan = 0;
+    boolean ustUstemi = true;
+    int asd;
+
+    public void actionPerformed(ActionEvent e) {
+        repaint();
+        time += 1;
+        if (durlan == 0) {
+            while (i < 6) {
+                geciciRandomX = 1 + rand.nextInt(ma.getMap().get(0).length() - 1);
+                geciciRandomY = 1 + rand.nextInt(ma.getMap().size() - 1);
+                cevap = ma.getMap(geciciRandomX, geciciRandomY);
+                for (int j = 0; j < 6; j++) {
+                    if (geciciRandomX == olusacakYerX[j] && geciciRandomY == olusacakYerY[j]) {
+                        ustUstemi = true;
+                        asd = j;
+                    }
+                }
+                while (cevap == '0' || '1' == geciciRandomY || geciciRandomY == m.getMap().size() - 1 || geciciRandomX == '0' || geciciRandomX == m.getMap().get(geciciRandomY).length() - 1 || ustUstemi == true) {
+                    for (int j = 0; j < 6; j++) {
+                        if (geciciRandomX == olusacakYerX[j] && geciciRandomY == olusacakYerY[j]) {
+                            ustUstemi = true;
+                            asd = j;
+                        }
+                    }
+                    geciciRandomX = 1 + rand.nextInt(ma.getMap().get(0).length() - 1);
+                    geciciRandomY = 1 + rand.nextInt(ma.getMap().size() - 1);
+                    if (geciciRandomX != olusacakYerX[asd] || geciciRandomY != olusacakYerY[asd]) {
+                        ustUstemi = false;
+                    }
+                    for (int j = 0; j < 6; j++) {
+                        if (geciciRandomX == olusacakYerX[j] && geciciRandomY == olusacakYerY[j]) {
+                            ustUstemi = true;
+                            asd = j;
+                        }
+                    }
+                    olusacakYerX[i] = geciciRandomX;
+                    olusacakYerY[i] = geciciRandomY;
+                    cevap = ma.getMap(geciciRandomX, geciciRandomY);
+                }
+                olusacakYerX[i] = geciciRandomX;
+                olusacakYerY[i] = geciciRandomY;
+                cevap = 0;
+                i++;
+            }
+
+        }
+        durlan = 1;
+    }
+
+    int durdurla = 0, durdurGurkan = 0;
+
+    public void paint(Graphics g) {
+        super.paint(g);
+        int j = 0;//alttaki case ayarlayıcı
+        for (int y = 0; y < m.getMap().size(); y++) {
+
+            for (int x = 0; x < m.getMap().get(y).length(); x++) {
+                if (m.getMap(x, y) == '1' && y == 0 || m.getMap(x, y) == '1' && y == m.getMap().size() - 1 || m.getMap(x, y) == '1' && x == 0 || m.getMap(x, y) == '1' && x == m.getMap().get(y).length() - 1) {
+                    switch (j) {
+                        case 0:
+                            g.drawImage(m.getA(), (x + 1) * 55, (y + 1) * 55, null);
+                            aX = x + 1;
+                            aY = y + 1;
+                            break;
+                        case 1:
+                            g.drawImage(m.getB(), (x + 1) * 55, (y + 1) * 55, null);
+                            bX = x + 1;
+                            bY = y + 1;
+                            break;
+                        case 2:
+                            g.drawImage(m.getC(), (x + 1) * 55, (y + 1) * 55, null);
+                            cX = x + 1;
+                            cY = y + 1;
+                            break;
+                        case 3:
+                            g.drawImage(m.getS(), (x + 1) * 55, (y + 1) * 55, null);
+                            sirineX = x + 1;
+                            sirineY = y + 1;
+                            break;
+                        case 4:
+                            g.drawImage(m.getD(), (x + 1) * 55, (y + 1) * 55, null);
+                            dX = x + 1;
+                            dY = y + 1;
+                            break;
+
+                    }
+                    j++;
+
+                } else if (m.getMap(x, y) == '1') {
+                    g.drawImage(m.getBeyaz(), (x + 1) * 55, (y + 1) * 55, null);
+                } else if (m.getMap(x, y) == '0') {
+                    g.drawImage(m.getSiyah(), (x + 1) * 55, (y + 1) * 55, null);
+                }
+            }
+        }
+        if (!yolGargamel11.isEmpty()) {
+            //System.out.println(yolGargamel11);
+            for (int k = 0; k < yolGargamel11.size(); k++) {
+                g.drawImage(m.getMavi_kutu(), ((int) (yolGargamel11.get(k) % m.getMap().get(0).length()) + 1) * 55, ((yolGargamel11.get(k) / m.getMap().get(0).length()) + 1) * 55, null);
+                //System.out.println((yolGargamel11.get(k) % m.getMap().get(0).length()) + "," + (yolGargamel11.get(k) / m.getMap().size()) + " Boyandı");
+            }
+        }
+        if (!yolAzman.isEmpty()) {
+            //System.out.println(yolGargamel11);
+            for (int k = 0; k < yolAzman.size(); k++) {
+                g.drawImage(m.getMavi_kutu(), ((int) (yolAzman.get(k) % m.getMap().get(0).length()) + 1) * 55, ((yolAzman.get(k) / m.getMap().get(0).length()) + 1) * 55, null);
+                //System.out.println((yolAzman.get(k) % m.getMap().get(0).length()) + "," + (yolAzman.get(k) / m.getMap().size()) + " Boyandı");
+            }
+        }
+        if (durdurGurkan == 0) {
+            if (m.getDusman().size() <= 2) {
+                if (m.getDusman().get(0).getDusmanAdi() == "Gargamel") {
+                    if (m.getDusman().get(0).getKapi() == 'A') {
+                        gargamel.setTilex(aX);
+                        gargamel.setTiley(aY);
+                    } else if (m.getDusman().get(0).getKapi() == 'B') {
+                        gargamel.setTilex(bX);
+                        gargamel.setTiley(bY);
+                    } else if (m.getDusman().get(0).getKapi() == 'C') {
+                        gargamel.setTilex(cX);
+                        gargamel.setTiley(cY);
+                    } else if (m.getDusman().get(0).getKapi() == 'D') {
+                        gargamel.setTilex(dX);
+                        gargamel.setTiley(dY);
+                    }
+                }
+                if (m.getDusman().get(0).getDusmanAdi() == "Azman") {
+                    if (m.getDusman().get(0).getKapi() == 'A') {
+                        azman.setTilex(aX);
+                        azman.setTiley(aY);
+                    } else if (m.getDusman().get(0).getKapi() == 'B') {
+                        azman.setTilex(bX);
+                        azman.setTiley(bY);
+                    } else if (m.getDusman().get(0).getKapi() == 'C') {
+                        azman.setTilex(cX);
+                        azman.setTiley(cY);
+                    } else if (m.getDusman().get(0).getKapi() == 'D') {
+                        azman.setTilex(dX);
+                        azman.setTiley(dY);
+                    }
+
+                }
+            }
+            if (m.getDusman().size() == 2) {
+                if (m.getDusman().get(1).getDusmanAdi() == "Gargamel") {
+                    if (m.getDusman().get(1).getKapi() == 'A') {
+                        gargamel.setTilex(aX);
+                        gargamel.setTiley(aY);
+                    } else if (m.getDusman().get(1).getKapi() == 'B') {
+                        gargamel.setTilex(bX);
+                        gargamel.setTiley(bY);
+                    } else if (m.getDusman().get(1).getKapi() == 'C') {
+                        gargamel.setTilex(cX);
+                        gargamel.setTiley(cY);
+                    } else if (m.getDusman().get(1).getKapi() == 'D') {
+                        gargamel.setTilex(dX);
+                        gargamel.setTiley(dY);
+                    }
+                }
+                if (m.getDusman().get(1).getDusmanAdi() == "Azman") {
+                    if (m.getDusman().get(1).getKapi() == 'A') {
+                        azman.setTilex(aX);
+                        azman.setTiley(aY);
+                    } else if (m.getDusman().get(1).getKapi() == 'B') {
+                        azman.setTilex(bX);
+                        azman.setTiley(bY);
+                    } else if (m.getDusman().get(1).getKapi() == 'C') {
+                        azman.setTilex(cX);
+                        azman.setTiley(cY);
+                    } else if (m.getDusman().get(1).getKapi() == 'D') {
+                        azman.setTilex(dX);
+                        azman.setTiley(dY);
+                    }
+                }
+            }
+            durdurGurkan = 1;
+        }
+        if (secim == 1) {
+            g.drawImage(gozluklu.getIm(), (gozluklu.getTilex() + 1) * 55, (gozluklu.getTiley() + 1) * 55, null);
+            if (m.getDusman().get(0).getDusmanAdi() == "Azman") {
+                g.drawImage(azman.getIma(), (azman.getTilex()) * 55, (azman.getTiley()) * 55, null);
+                //Azman Gozluklu path;
+                int bas4 = 0;
+                int son4 = 0;
+                int durudurMete = 0;
+                if (durudurMete == 0) {
+                    durudurMete = 1;
+                    graph = new GraphShow();
+                }
+                String data4 = graph.Show(azman.getTilex() - 1, azman.getTiley() - 1, gozluklu.getTilex(), gozluklu.getTiley());
+                //System.out.println("Azmanin hareketi =" + data4);
+                boolean flag2 = false;
+                yolAzman = new ArrayList<>();
+                if (data4 != null) {
+                    for (int i = 0; i < data4.length(); i++) {
+                        if (data4.charAt(i) == ' ' && flag2 == false && yolAzman.isEmpty()) {
+                            flag2 = true;
+                            yolAzman.add(Integer.parseInt(data4.substring(bas4, i)));
+                            bas4 = i;
+                            son4 = i;
+                        } else if (data4.charAt(i) == ' ' && flag2 == true) {
+                            flag2 = false;
+                            son4 = i;
+                            yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, son4)));
+                            bas4 = i;
+                        } else if (data4.charAt(i) == ' ' && flag2 == false) {
+                            flag2 = false;
+                            son4 = i;
+                            yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, i)));
+                            bas4 = i;
+                        } else if (i == data4.length() - 1) {
+                            yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, i + 1)));
+                        }
+                    }
+                    //System.out.println("Board ici");
+                    /*
+                for (int i = 0; i < yolGargamel11.size(); i++) {
+                    System.out.print(yolGargamel11.get(i) + " ");
+                }
+                     */
+
+                }
+                //Azman gozluklu path sonu
+            }
+            if (m.getDusman().size() == 2) {
+                if (m.getDusman().get(1).getDusmanAdi() == "Azman") {
+                    g.drawImage(azman.getIma(), (azman.getTilex()) * 55, (azman.getTiley()) * 55, null);
+                    //Azman Gozluklu path;
+                    int bas4 = 0;
+                    int son4 = 0;
+                    int durudurMete = 0;
+                    if (durudurMete == 0) {
+                        durudurMete = 1;
+                        graph = new GraphShow();
+                    }
+                    String data4 = graph.Show(azman.getTilex() - 1, azman.getTiley() - 1, gozluklu.getTilex(), gozluklu.getTiley());
+                    //System.out.println("Azmanin hareketi = " + data4);
+                    boolean flag2 = false;
+                    yolAzman = new ArrayList<>();
+                    if (data4 != null) {
+                        for (int i = 0; i < data4.length(); i++) {
+                            if (data4.charAt(i) == ' ' && flag2 == false && yolAzman.isEmpty()) {
+                                flag2 = true;
+                                yolAzman.add(Integer.parseInt(data4.substring(bas4, i)));
+                                bas4 = i;
+                                son4 = i;
+                            } else if (data4.charAt(i) == ' ' && flag2 == true) {
+                                flag2 = false;
+                                son4 = i;
+                                yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, son4)));
+                                bas4 = i;
+                            } else if (data4.charAt(i) == ' ' && flag2 == false) {
+                                flag2 = false;
+                                son4 = i;
+                                yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, i)));
+                                bas4 = i;
+                            } else if (i == data4.length() - 1) {
+                                yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, i + 1)));
+                            }
+                        }
+                        // System.out.println("Board ici");
+                        /*
+                for (int i = 0; i < yolGargamel11.size(); i++) {
+                    System.out.print(yolGargamel11.get(i) + " ");
+                }
+                         */
+
+                    }
+                    //Azman gozluklu path sonu
+                }
+            }
+            if (m.getDusman().get(0).getDusmanAdi() == "Gargamel") {
+                g.drawImage(gargamel.getIma(), (gargamel.getTilex()) * 55, (gargamel.getTiley()) * 55, null);
+                //Gargamel Gozluklu Path Alıcı
+
+                int bas2 = 0;
+                int son2 = 0;
+                int durudurMete = 0;
+                if (durudurMete == 0) {
+                    durudurMete = 1;
+                    graph = new GraphShow();
+                }
+                String data3 = graph.Show(gargamel.getTilex() - 1, gargamel.getTiley() - 1, gozluklu.getTilex(), gozluklu.getTiley());
+                //System.out.println("Gargamelin hareketi = " + data3);
+                boolean flag2 = false;
+                yolGargamel11 = new ArrayList<>();
+                if (data3 != null) {
+                    for (int i = 0; i < data3.length(); i++) {
+                        if (data3.charAt(i) == ' ' && flag2 == false && yolGargamel11.isEmpty()) {
+                            flag2 = true;
+                            yolGargamel11.add(Integer.parseInt(data3.substring(bas2, i)));
+                            bas2 = i;
+                            son2 = i;
+                        } else if (data3.charAt(i) == ' ' && flag2 == true) {
+                            flag2 = false;
+                            son2 = i;
+                            yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, son2)));
+                            bas2 = i;
+                        } else if (data3.charAt(i) == ' ' && flag2 == false) {
+                            flag2 = false;
+                            son2 = i;
+                            yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, i)));
+                            bas2 = i;
+                        } else if (i == data3.length() - 1) {
+                            yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, i + 1)));
+                        }
+                    }
+                    //System.out.println("Board ici");
+                    /*
+                for (int i = 0; i < yolGargamel11.size(); i++) {
+                    System.out.print(yolGargamel11.get(i) + " ");
+                }
+                     */
+
+                }
+
+                //Gargamel Gozluklu Path Alıcı sonu
+            }
+            if (m.getDusman().size() == 2) {
+                if (m.getDusman().get(1).getDusmanAdi() == "gargamel") {
+                    g.drawImage(gargamel.getIma(), (gargamel.getTilex()) * 55, (gargamel.getTiley()) * 55, null);
+                    //Gargamel Gozluklu Path Alıcı
+
+                    int bas2 = 0;
+                    int son2 = 0;
+                    int durudurMete = 0;
+                    if (durudurMete == 0) {
+                        durudurMete = 1;
+                        graph = new GraphShow();
+                    }
+                    String data3 = graph.Show(gargamel.getTilex() - 1, gargamel.getTiley() - 1, gozluklu.getTilex(), gozluklu.getTiley());
+                    //System.out.println("Gargamelin hareketi =" + data3);
+                    boolean flag2 = false;
+                    yolGargamel11 = new ArrayList<>();
+                    if (data3 != null) {
+                        for (int i = 0; i < data3.length(); i++) {
+                            if (data3.charAt(i) == ' ' && flag2 == false && yolGargamel11.isEmpty()) {
+                                flag2 = true;
+                                yolGargamel11.add(Integer.parseInt(data3.substring(bas2, i)));
+                                bas2 = i;
+                                son2 = i;
+                            } else if (data3.charAt(i) == ' ' && flag2 == true) {
+                                flag2 = false;
+                                son2 = i;
+                                yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, son2)));
+                                bas2 = i;
+                            } else if (data3.charAt(i) == ' ' && flag2 == false) {
+                                flag2 = false;
+                                son2 = i;
+                                yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, i)));
+                                bas2 = i;
+                            } else if (i == data3.length() - 1) {
+                                yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, i + 1)));
+                            }
+                        }
+                        //System.out.println("Board ici");
+                        /*
+                for (int i = 0; i < yolGargamel11.size(); i++) {
+                    System.out.print(yolGargamel11.get(i) + " ");
+                }
+                         */
+
+                    }
+
+                    //Gargamel Gozluklu Path Alıcı sonu
+                }
+            }
+
+            if (time > random * 40) {
+                if (time < random * 40 + duration) {
+                    for (int i = 0; i < 5; i++) {
+                        g.drawImage(altin.getIm(), (olusacakYerX[i] + 1) * 55, (olusacakYerY[i] + 1) * 55, null);
+                    }
+                    if ((gozluklu.getTilex() + 1) == (olusacakYerX[0] + 1) && (gozluklu.getTiley() + 1) == (olusacakYerY[0] + 1) || gozlukluArkasiX+1 == (olusacakYerX[0] + 1) && gozlukluArkasiY+1 == (olusacakYerY[0] + 1)) {
+                        gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                        olusacakYerX[0] = 2555;
+                        olusacakYerY[0] = 2555;
+
+                    } else if ((gozluklu.getTilex() + 1) == (olusacakYerX[1] + 1) && (gozluklu.getTiley() + 1) == (olusacakYerY[1] + 1) || gozlukluArkasiX+1 == (olusacakYerX[1] + 1) && gozlukluArkasiY+1 == (olusacakYerY[1] + 1)) {
+                        gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                        olusacakYerX[1] = 2555;
+                        olusacakYerY[1] = 2555;
+
+                    } else if ((gozluklu.getTilex() + 1) == (olusacakYerX[2] + 1) && (gozluklu.getTiley() + 1) == (olusacakYerY[2] + 1) || gozlukluArkasiX+1 == (olusacakYerX[2] + 1) && gozlukluArkasiY+1 == (olusacakYerY[2] + 1)) {
+                        gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                        olusacakYerX[2] = 2555;
+                        olusacakYerY[2] = 2555;
+
+                    } else if ((gozluklu.getTilex() + 1) == (olusacakYerX[3] + 1) && (gozluklu.getTiley() + 1) == (olusacakYerY[3] + 1) || gozlukluArkasiX+1 == (olusacakYerX[3] + 1) && gozlukluArkasiY+1 == (olusacakYerY[3] + 1)) {
+                        gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                        olusacakYerX[3] = 2555;
+                        olusacakYerY[3] = 2555;
+
+                    } else if ((gozluklu.getTilex() + 1) == (olusacakYerX[4] + 1) && (gozluklu.getTiley() + 1) == (olusacakYerY[4] + 1) || gozlukluArkasiX+1 == (olusacakYerX[4] + 1) && gozlukluArkasiY+1 == (olusacakYerY[4] + 1)) {
+                        gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                        olusacakYerX[4] = 2555;
+                        olusacakYerY[4] = 2555;
+
+                    }
+                }
+            }
+            if (time > randomMantar * 40) {
+                if (time < randomMantar * 40 + 280) {
+                    g.drawImage(mantar.getIm(), (olusacakYerX[5] + 1) * 55, (olusacakYerY[5] + 1) * 55, null);
+                    if ((gozluklu.getTilex() + 1) == (olusacakYerX[5] + 1) && (gozluklu.getTiley() + 1) == (olusacakYerY[5] + 1) || gozlukluArkasiX+1 == (olusacakYerX[5] + 1) && gozlukluArkasiY+1 == (olusacakYerY[5] + 1)) {
+                        gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() + mantar.getMantarDegeri());
+                        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                        olusacakYerX[5] = 2555;
+                        olusacakYerY[5] = 2555;
+
+                    }
+                }
+            }
+            if ((gozluklu.getTilex() + 1) == sirineX && (gozluklu.getTiley() + 1) == sirineY) {
+                secim = 3;
+            }
+        } else if (secim == 2) {
+            g.drawImage(tembel.getIm(), (tembel.getTilex() + 1) * 55, (tembel.getTiley() + 1) * 55, null);
+            if (m.getDusman().get(0).getDusmanAdi() == "Azman") {
+                g.drawImage(azman.getIma(), (azman.getTilex()) * 55, (azman.getTiley()) * 55, null);
+                //Azman Tembel path;
+                int bas4 = 0;
+                int son4 = 0;
+                int durudurMete = 0;
+                if (durudurMete == 0) {
+                    durudurMete = 1;
+                    graph = new GraphShow();
+                }
+                String data4 = graph.Show(azman.getTilex() - 1, azman.getTiley() - 1, tembel.getTilex(), tembel.getTiley());
+                //System.out.println("data4=" + data4);
+                boolean flag2 = false;
+                yolAzman = new ArrayList<>();
+                if (data4 != null) {
+                    for (int i = 0; i < data4.length(); i++) {
+                        if (data4.charAt(i) == ' ' && flag2 == false && yolAzman.isEmpty()) {
+                            flag2 = true;
+                            yolAzman.add(Integer.parseInt(data4.substring(bas4, i)));
+                            bas4 = i;
+                            son4 = i;
+                        } else if (data4.charAt(i) == ' ' && flag2 == true) {
+                            flag2 = false;
+                            son4 = i;
+                            yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, son4)));
+                            bas4 = i;
+                        } else if (data4.charAt(i) == ' ' && flag2 == false) {
+                            flag2 = false;
+                            son4 = i;
+                            yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, i)));
+                            bas4 = i;
+                        } else if (i == data4.length() - 1) {
+                            yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, i + 1)));
+                        }
+                    }
+                    //System.out.println("Board ici");
+                    /*
+                for (int i = 0; i < yolGargamel11.size(); i++) {
+                    System.out.print(yolGargamel11.get(i) + " ");
+                }
+                     */
+
+                }
+                //Azman tembel path sonu
+            }
+            if (m.getDusman().size() == 2) {
+                if (m.getDusman().get(1).getDusmanAdi() == "Azman") {
+                    g.drawImage(azman.getIma(), (azman.getTilex()) * 55, (azman.getTiley()) * 55, null);
+                    //Azman Tembel path;
+                    int bas4 = 0;
+                    int son4 = 0;
+                    int durudurMete = 0;
+                    if (durudurMete == 0) {
+                        durudurMete = 1;
+                        graph = new GraphShow();
+                    }
+                    String data4 = graph.Show(azman.getTilex() - 1, azman.getTiley() - 1, tembel.getTilex(), tembel.getTiley());
+                    //System.out.println("data4=" + data4);
+                    boolean flag2 = false;
+                    yolAzman = new ArrayList<>();
+                    if (data4 != null) {
+                        for (int i = 0; i < data4.length(); i++) {
+                            if (data4.charAt(i) == ' ' && flag2 == false && yolAzman.isEmpty()) {
+                                flag2 = true;
+                                yolAzman.add(Integer.parseInt(data4.substring(bas4, i)));
+                                bas4 = i;
+                                son4 = i;
+                            } else if (data4.charAt(i) == ' ' && flag2 == true) {
+                                flag2 = false;
+                                son4 = i;
+                                yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, son4)));
+                                bas4 = i;
+                            } else if (data4.charAt(i) == ' ' && flag2 == false) {
+                                flag2 = false;
+                                son4 = i;
+                                yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, i)));
+                                bas4 = i;
+                            } else if (i == data4.length() - 1) {
+                                yolAzman.add(Integer.parseInt(data4.substring(bas4 + 1, i + 1)));
+                            }
+                        }
+                        //System.out.println("Board ici");
+                        /*
+                for (int i = 0; i < yolGargamel11.size(); i++) {
+                    System.out.print(yolGargamel11.get(i) + " ");
+                }
+                         */
+
+                    }
+                    //Azman tembel path sonu
+                }
+            }
+            if (m.getDusman().get(0).getDusmanAdi() == "Gargamel") {
+                g.drawImage(gargamel.getIma(), (gargamel.getTilex()) * 55, (gargamel.getTiley()) * 55, null);
+                //Gargamel Gozluklu Path Alıcı
+
+                int bas2 = 0;
+                int son2 = 0;
+                int durudurMete = 0;
+                if (durudurMete == 0) {
+                    durudurMete = 1;
+                    graph = new GraphShow();
+                }
+                String data3 = graph.Show(gargamel.getTilex() - 1, gargamel.getTiley() - 1, tembel.getTilex(), tembel.getTiley());
+                //System.out.println("data3=" + data3);
+                boolean flag2 = false;
+                yolGargamel11 = new ArrayList<>();
+                if (data3 != null) {
+                    for (int i = 0; i < data3.length(); i++) {
+                        if (data3.charAt(i) == ' ' && flag2 == false && yolGargamel11.isEmpty()) {
+                            flag2 = true;
+                            yolGargamel11.add(Integer.parseInt(data3.substring(bas2, i)));
+                            bas2 = i;
+                            son2 = i;
+                        } else if (data3.charAt(i) == ' ' && flag2 == true) {
+                            flag2 = false;
+                            son2 = i;
+                            yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, son2)));
+                            bas2 = i;
+                        } else if (data3.charAt(i) == ' ' && flag2 == false) {
+                            flag2 = false;
+                            son2 = i;
+                            yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, i)));
+                            bas2 = i;
+                        } else if (i == data3.length() - 1) {
+                            yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, i + 1)));
+                        }
+                    }
+                    //System.out.println("Board ici");
+                    /*
+                for (int i = 0; i < yolGargamel11.size(); i++) {
+                    System.out.print(yolGargamel11.get(i) + " ");
+                }
+                     */
+
+                }
+
+                //Gargamel Gozluklu Path Alıcı sonu
+            }
+            if (m.getDusman().size() == 2) {
+                if (m.getDusman().get(1).getDusmanAdi() == "Gargamel") {
+                    g.drawImage(gargamel.getIma(), (gargamel.getTilex()) * 55, (gargamel.getTiley()) * 55, null);
+                    //Gargamel Gozluklu Path Alıcı
+
+                    int bas2 = 0;
+                    int son2 = 0;
+                    int durudurMete = 0;
+                    if (durudurMete == 0) {
+                        durudurMete = 1;
+                        graph = new GraphShow();
+                    }
+                    String data3 = graph.Show(gargamel.getTilex() - 1, gargamel.getTiley() - 1, tembel.getTilex(), tembel.getTiley());
+                    //System.out.println("data3=" + data3);
+                    boolean flag2 = false;
+                    yolGargamel11 = new ArrayList<>();
+                    if (data3 != null) {
+                        for (int i = 0; i < data3.length(); i++) {
+                            if (data3.charAt(i) == ' ' && flag2 == false && yolGargamel11.isEmpty()) {
+                                flag2 = true;
+                                yolGargamel11.add(Integer.parseInt(data3.substring(bas2, i)));
+                                bas2 = i;
+                                son2 = i;
+                            } else if (data3.charAt(i) == ' ' && flag2 == true) {
+                                flag2 = false;
+                                son2 = i;
+                                yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, son2)));
+                                bas2 = i;
+                            } else if (data3.charAt(i) == ' ' && flag2 == false) {
+                                flag2 = false;
+                                son2 = i;
+                                yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, i)));
+                                bas2 = i;
+                            } else if (i == data3.length() - 1) {
+                                yolGargamel11.add(Integer.parseInt(data3.substring(bas2 + 1, i + 1)));
+                            }
+                        }
+                        //System.out.println("Board ici");
+                        /*
+                for (int i = 0; i < yolGargamel11.size(); i++) {
+                    System.out.print(yolGargamel11.get(i) + " ");
+                }
+                         */
+
+                    }
+
+                    //Gargamel Gozluklu Path Alıcı sonu
+                }
+            }
+            if (time > random * 40) {
+                if (time < random * 40 + duration) {
+                    for (int i = 0; i < 5; i++) {
+                        g.drawImage(altin.getIm(), (olusacakYerX[i] + 1) * 55, (olusacakYerY[i] + 1) * 55, null);
+                    }
+                    if ((tembel.getTilex() + 1) == (olusacakYerX[0] + 1) && (tembel.getTiley() + 1) == (olusacakYerY[0] + 1)) {
+                        tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                        olusacakYerX[0] = 2555;
+                        olusacakYerY[0] = 2555;
+
+                    } else if ((tembel.getTilex() + 1) == (olusacakYerX[1] + 1) && (tembel.getTiley() + 1) == (olusacakYerY[1] + 1)) {
+                        tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                        olusacakYerX[1] = 2555;
+                        olusacakYerY[1] = 2555;
+
+                    } else if ((tembel.getTilex() + 1) == (olusacakYerX[2] + 1) && (tembel.getTiley() + 1) == (olusacakYerY[2] + 1)) {
+                        tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                        olusacakYerX[2] = 2555;
+                        olusacakYerY[2] = 2555;
+
+                    } else if ((tembel.getTilex() + 1) == (olusacakYerX[3] + 1) && (tembel.getTiley() + 1) == (olusacakYerY[3] + 1)) {
+                        tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                        olusacakYerX[3] = 2555;
+                        olusacakYerY[3] = 2555;
+
+                    } else if ((tembel.getTilex() + 1) == (olusacakYerX[4] + 1) && (tembel.getTiley() + 1) == (olusacakYerY[4] + 1)) {
+                        tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() + altin.getAltinDegeri());
+                        skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                        olusacakYerX[4] = 2555;
+                        olusacakYerY[4] = 2555;
+                    }
+                }
+            }
+            if (time > randomMantar * 40) {
+                if (time < randomMantar * 40 + 280) {
+                    g.drawImage(mantar.getIm(), (olusacakYerX[5] + 1) * 55, (olusacakYerY[5] + 1) * 55, null);
+                    if ((tembel.getTilex() + 1) == (olusacakYerX[5] + 1) && (tembel.getTiley() + 1) == (olusacakYerY[5] + 1)) {
+                        tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() + mantar.getMantarDegeri());
+                        skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                        olusacakYerX[5] = 2555;
+                        olusacakYerY[5] = 2555;
+
+                    }
+                }
+
+            }
+            if ((tembel.getTilex() + 1) == sirineX && (tembel.getTiley() + 1) == sirineY) {
+                System.out.println("BITTI");
+                secim = 3;
+            }
+        } else if (secim == 3) {
+            g.drawImage(bitisFotoW.getImage(), 50, 50, null);
+        } else if (secim == 4) {
+            g.drawImage(bitisFotoL.getImage(), 50, 50, null);
+        }
+    }
+
+    public class Al extends KeyAdapter {
+
+        String sub = new String();
+        String sub2 = new String();
+        GraphShow graph2;
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int keycode = e.getKeyCode();
+            if (secim == 1) {
+                graph2 = new GraphShow();
+                if (m.getDusman().get(0).getDusmanAdi() == "Gargamel") {
+                    String data2 = graph2.Show(gargamel.getTilex() - 1, gargamel.getTiley() - 1, gozluklu.getTilex(), gozluklu.getTiley());
+                    boolean flag2 = false;
+                    int bas2 = 0, son2 = 0;
+                    if (data2 != null) {
+                        for (int i = 0; i < data2.length(); i++) {
+                            if (data2.charAt(i) == ' ' && flag2 == false) {
+                                flag2 = true;
+                                bas2 = i;
+
+                            } else if (data2.charAt(i) == ' ' && flag2 == true) {
+                                son2 = i;
+                                sub2 = data2.substring(bas2 + 1, son2);
+                                break;
+                            }
+                        }
+                    }
+
+                    int kucuk2 = Integer.parseInt(sub2);
+                    if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + gargamel.getTilex() - 1) == kucuk2 + 1) {
+                        gargamel.move(-1, 0);
+                        //System.out.println("gargamel yol = " + data2);
+                    }
+                    if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + (gargamel.getTilex() - 1)) == kucuk2 + m.getMap().get(0).length()) {
+                        //System.out.println("gargamel yol = " + data2);
+                        gargamel.move(0, -1);
+
+                    }
+                    if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + (gargamel.getTilex() - 1)) == kucuk2 - m.getMap().get(0).length()) {
+                        //System.out.println("gargamel yol = " + data2);
+                        gargamel.move(0, 1);
+                    }
+                    if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + gargamel.getTilex() - 1) == kucuk2 - 1) {
+                        //System.out.println("gargamel yol = " + data2);
+                        gargamel.move(1, 0);
+                    }
+                    if (gozluklu.getTilex() == gargamel.getTilex() - 1 && gozluklu.getTiley() == gargamel.getTiley() - 1) {
+                        gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() - gargamel.getGargamelPuanDususu());
+                        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                        if (m.getDusman().size() <= 2) {
+                            if (m.getDusman().get(0).getDusmanAdi() == "Gargamel") {
+                                if (m.getDusman().get(0).getKapi() == 'A') {
+                                    gargamel.setTilex(aX);
+                                    gargamel.setTiley(aY);
+                                } else if (m.getDusman().get(0).getKapi() == 'B') {
+                                    gargamel.setTilex(bX);
+                                    gargamel.setTiley(bY);
+                                } else if (m.getDusman().get(0).getKapi() == 'C') {
+                                    gargamel.setTilex(cX);
+                                    gargamel.setTiley(cY);
+                                } else if (m.getDusman().get(0).getKapi() == 'D') {
+                                    gargamel.setTilex(dX);
+                                    gargamel.setTiley(dY);
+                                }
+                            }
+                        }
+                        if (m.getDusman().size() == 2) {
+                            if (m.getDusman().get(1).getDusmanAdi() == "Gargamel") {
+                                if (m.getDusman().get(1).getKapi() == 'A') {
+                                    gargamel.setTilex(aX);
+                                    gargamel.setTiley(aY);
+                                } else if (m.getDusman().get(1).getKapi() == 'B') {
+                                    gargamel.setTilex(bX);
+                                    gargamel.setTiley(bY);
+                                } else if (m.getDusman().get(1).getKapi() == 'C') {
+                                    gargamel.setTilex(cX);
+                                    gargamel.setTiley(cY);
+                                } else if (m.getDusman().get(1).getKapi() == 'D') {
+                                    gargamel.setTilex(dX);
+                                    gargamel.setTiley(dY);
+                                }
+                            }
+                        }
+                    }
+                    if (gozluklu.getGozlukluPuan().getPuan() <= 0) {
+                        secim = 4;
+                    }
+                }
+                if (m.getDusman().size() == 2) {
+                    if (m.getDusman().get(1).getDusmanAdi() == "Gargamel") {
+                        String data2 = graph.Show(gargamel.getTilex() - 1, gargamel.getTiley() - 1, gozluklu.getTilex(), gozluklu.getTiley());
+                        boolean flag2 = false;
+                        int bas2 = 0, son2 = 0;
+                        if (data2 != null) {
+                            for (int i = 0; i < data2.length(); i++) {
+                                if (data2.charAt(i) == ' ' && flag2 == false) {
+                                    flag2 = true;
+                                    bas2 = i;
+
+                                } else if (data2.charAt(i) == ' ' && flag2 == true) {
+                                    son2 = i;
+                                    sub2 = data2.substring(bas2 + 1, son2);
+                                    break;
+                                }
+                            }
+                        }
+
+                        int kucuk2 = Integer.parseInt(sub2);
+                        if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + gargamel.getTilex() - 1) == kucuk2 + 1) {
+                            gargamel.move(-1, 0);
+                            //System.out.println("gargamel yol = " + data2);
+                        }
+                        if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + (gargamel.getTilex() - 1)) == kucuk2 + m.getMap().get(0).length()) {
+                            //System.out.println("gargamel yol = " + data2);
+                            gargamel.move(0, -1);
+
+                        }
+                        if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + (gargamel.getTilex() - 1)) == kucuk2 - m.getMap().get(0).length()) {
+                            //System.out.println("gargamel yol = " + data2);
+                            gargamel.move(0, 1);
+                        }
+                        if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + gargamel.getTilex() - 1) == kucuk2 - 1) {
+                            //System.out.println("gargamel yol = " + data2);
+                            gargamel.move(1, 0);
+                        }
+                        if (gozluklu.getTilex() == gargamel.getTilex() - 1 && gozluklu.getTiley() == gargamel.getTiley() - 1) {
+                            gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() - gargamel.getGargamelPuanDususu());
+                            skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                            if (m.getDusman().size() <= 2) {
+                                if (m.getDusman().get(0).getDusmanAdi() == "Gargamel") {
+                                    if (m.getDusman().get(0).getKapi() == 'A') {
+                                        gargamel.setTilex(aX);
+                                        gargamel.setTiley(aY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'B') {
+                                        gargamel.setTilex(bX);
+                                        gargamel.setTiley(bY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'C') {
+                                        gargamel.setTilex(cX);
+                                        gargamel.setTiley(cY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'D') {
+                                        gargamel.setTilex(dX);
+                                        gargamel.setTiley(dY);
+                                    }
+                                }
+                            }
+                            if (m.getDusman().size() == 2) {
+                                if (m.getDusman().get(1).getDusmanAdi() == "Gargamel") {
+                                    if (m.getDusman().get(1).getKapi() == 'A') {
+                                        gargamel.setTilex(aX);
+                                        gargamel.setTiley(aY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'B') {
+                                        gargamel.setTilex(bX);
+                                        gargamel.setTiley(bY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'C') {
+                                        gargamel.setTilex(cX);
+                                        gargamel.setTiley(cY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'D') {
+                                        gargamel.setTilex(dX);
+                                        gargamel.setTiley(dY);
+                                    }
+                                }
+                            }
+                        }
+                        if (gozluklu.getGozlukluPuan().getPuan() <= 0) {
+                            secim = 4;
+                        }
+                    }
+                }
+
+                //azman
+                if (m.getDusman().get(0).getDusmanAdi() == "Azman") {
+                    String data = graph2.Show(azman.getTilex() - 1, azman.getTiley() - 1, gozluklu.getTilex(), gozluklu.getTiley());
+                    boolean flag = false;
+                    int bas = 0, son = 0;
+                    if (data != null) {
+                        for (int i = 0; i < data.length(); i++) {
+                            if (data.charAt(i) == ' ' && flag == false) {
+                                flag = true;
+                                bas = i;
+                            } else if (data.charAt(i) == ' ' && flag == true) {
+                                son = i;
+                                sub = data.substring(bas + 1, son);
+                                break;
+                            }
+                        }
+                    }
+                    if (data == null) {
+                        //System.out.println("azman data = null");
+                    }
+                    //azman
+                    int kucuk = Integer.parseInt(sub);
+                    //System.out.println("azman sub = " + sub);
+                    if (((azman.getTiley() - 1) * m.getMap().get(0).length() + azman.getTilex() - 1) == kucuk + 1) {
+                        //System.out.println("azman yol = " + data);
+                        azman.move(-1, 0);
+                    }
+                    if (((azman.getTiley() - 1) * m.getMap().get(0).length() + (azman.getTilex() - 1)) == kucuk - m.getMap().get(0).length()) {
+                        //System.out.println("azman yol = " + data);
+                        azman.move(0, 1);
+                    }
+                    if (((azman.getTiley() - 1) * m.getMap().get(0).length() + (azman.getTilex() - 1)) == kucuk + m.getMap().get(0).length()) {
+                        //System.out.println("azman yol = " + data);
+                        azman.move(0, -1);
+                    }
+                    if (((azman.getTiley() - 1) * m.getMap().get(0).length() + azman.getTilex() - 1) == kucuk - 1) {
+                        //System.out.println("azman yol = " + data);
+                        azman.move(1, 0);
+                    }
+                    if (gozluklu.getTilex() == azman.getTilex() - 1 && gozluklu.getTiley() == azman.getTiley() - 1) {
+                        gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() - azman.getAzmanPuanDususu());
+                        skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                        if (m.getDusman().size() <= 2) {
+                            if (m.getDusman().get(0).getDusmanAdi() == "Azman") {
+                                if (m.getDusman().get(0).getKapi() == 'A') {
+                                    azman.setTilex(aX);
+                                    azman.setTiley(aY);
+                                } else if (m.getDusman().get(0).getKapi() == 'B') {
+                                    azman.setTilex(bX);
+                                    azman.setTiley(bY);
+                                } else if (m.getDusman().get(0).getKapi() == 'C') {
+                                    azman.setTilex(cX);
+                                    azman.setTiley(cY);
+                                } else if (m.getDusman().get(0).getKapi() == 'D') {
+                                    azman.setTilex(dX);
+                                    azman.setTiley(dY);
+                                }
+
+                            }
+                        }
+                        if (m.getDusman().size() == 2) {
+                            if (m.getDusman().get(1).getDusmanAdi() == "Azman") {
+                                if (m.getDusman().get(1).getKapi() == 'A') {
+                                    azman.setTilex(aX);
+                                    azman.setTiley(aY);
+                                } else if (m.getDusman().get(1).getKapi() == 'B') {
+                                    azman.setTilex(bX);
+                                    azman.setTiley(bY);
+                                } else if (m.getDusman().get(1).getKapi() == 'C') {
+                                    azman.setTilex(cX);
+                                    azman.setTiley(cY);
+                                } else if (m.getDusman().get(1).getKapi() == 'D') {
+                                    azman.setTilex(dX);
+                                    azman.setTiley(dY);
+                                }
+                            }
+                        }
+                    }
+                    if (gozluklu.getGozlukluPuan().getPuan() <= 0) {
+                        secim = 4;
+                    }
+                }
+                if (m.getDusman().size() == 2) {
+                    if (m.getDusman().get(1).getDusmanAdi() == "Azman") {
+                        String data = graph2.Show(azman.getTilex() - 1, azman.getTiley() - 1, gozluklu.getTilex(), gozluklu.getTiley());
+                        boolean flag = false;
+                        int bas = 0, son = 0;
+                        if (data != null) {
+                            for (int i = 0; i < data.length(); i++) {
+                                if (data.charAt(i) == ' ' && flag == false) {
+                                    flag = true;
+                                    bas = i;
+                                } else if (data.charAt(i) == ' ' && flag == true) {
+                                    son = i;
+                                    sub = data.substring(bas + 1, son);
+                                    break;
+                                }
+                            }
+                        }
+                        if (data == null) {
+                            //System.out.println("azman data = null");
+                        }
+                        //azman
+                        //System.out.println(sub);
+                        int kucuk = (int) Integer.parseInt(sub);
+                        //System.out.println("azman sub = " + sub);
+                        if (((azman.getTiley() - 1) * m.getMap().get(0).length() + azman.getTilex() - 1) == kucuk + 1) {
+                            //System.out.println("azman yol = " + data);
+                            azman.move(-1, 0);
+                        }
+                        if (((azman.getTiley() - 1) * m.getMap().get(0).length() + (azman.getTilex() - 1)) == kucuk - m.getMap().get(0).length()) {
+                            //System.out.println("azman yol = " + data);
+                            azman.move(0, 1);
+                        }
+                        if (((azman.getTiley() - 1) * m.getMap().get(0).length() + (azman.getTilex() - 1)) == kucuk + m.getMap().get(0).length()) {
+                            //System.out.println("azman yol = " + data);
+                            azman.move(0, -1);
+                        }
+                        if (((azman.getTiley() - 1) * m.getMap().get(0).length() + azman.getTilex() - 1) == kucuk - 1) {
+                            //System.out.println("azman yol = " + data);
+                            azman.move(1, 0);
+                        }
+                        if (gozluklu.getTilex() == azman.getTilex() - 1 && gozluklu.getTiley() == azman.getTiley() - 1) {
+                            gozluklu.getGozlukluPuan().setPuan(gozluklu.getGozlukluPuan().getPuan() - azman.getAzmanPuanDususu());
+                            skorgosteren.setText("PUAN: " + gozluklu.getGozlukluPuan().getPuan());
+                            if (m.getDusman().size() <= 2) {
+                                if (m.getDusman().get(0).getDusmanAdi() == "Azman") {
+                                    if (m.getDusman().get(0).getKapi() == 'A') {
+                                        azman.setTilex(aX);
+                                        azman.setTiley(aY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'B') {
+                                        azman.setTilex(bX);
+                                        azman.setTiley(bY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'C') {
+                                        azman.setTilex(cX);
+                                        azman.setTiley(cY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'D') {
+                                        azman.setTilex(dX);
+                                        azman.setTiley(dY);
+                                    }
+
+                                }
+                            }
+                            if (m.getDusman().size() == 2) {
+                                if (m.getDusman().get(1).getDusmanAdi() == "Azman") {
+                                    if (m.getDusman().get(1).getKapi() == 'A') {
+                                        azman.setTilex(aX);
+                                        azman.setTiley(aY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'B') {
+                                        azman.setTilex(bX);
+                                        azman.setTiley(bY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'C') {
+                                        azman.setTilex(cX);
+                                        azman.setTiley(cY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'D') {
+                                        azman.setTilex(dX);
+                                        azman.setTiley(dY);
+                                    }
+                                }
+                            }
+                        }
+                        if (gozluklu.getGozlukluPuan().getPuan() <= 0) {
+                            secim = 4;
+                        }
+                    }
+
+                }
+                if (gozluklu.getTiley() - 2 != -2) {
+                    if (gozluklu.getTiley() - 2 != -1) {
+                        if (keycode == KeyEvent.VK_W) {
+                            if (m.getMap(gozluklu.getTilex(), gozluklu.getTiley() - 2) != '0') {
+                                gozlukluArkasiX = gozluklu.getTilex();
+                                gozlukluArkasiY = gozluklu.getTiley() - 1;
+                                gozluklu.move(0, -2);
+                            }
+                        }
+                    }
+                }
+                if (gozluklu.getTilex() + 2 != m.getMap().get(0).length()) {
+
+                    if (keycode == KeyEvent.VK_D) {
+
+                        if (m.getMap(gozluklu.getTilex() + 2, gozluklu.getTiley()) != '0') {
+                            gozlukluArkasiX = gozluklu.getTilex() + 1;
+                            gozlukluArkasiY = gozluklu.getTiley();
+                            gozluklu.move(2, 0);
+                        }
+
+                    }
+                }
+                if (gozluklu.getTiley() + 2 != m.getMap().size()) {
+                    if (keycode == KeyEvent.VK_S) {
+                        if (m.getMap(gozluklu.getTilex(), gozluklu.getTiley() + 2) != '0') {
+                            gozlukluArkasiX = gozluklu.getTilex();
+                            gozlukluArkasiY = gozluklu.getTiley() + 1;
+                            gozluklu.move(0, 2);
+                        }
+                    }
+                }
+                if (gozluklu.getTilex() - 2 != -1) {
+                    if (keycode == KeyEvent.VK_A) {
+                        if (m.getMap(gozluklu.getTilex() - 2, gozluklu.getTiley()) != '0') {
+                            gozlukluArkasiX = gozluklu.getTilex()-1;
+                            gozlukluArkasiY = gozluklu.getTiley();
+                            gozluklu.move(-2, 0);
+                        }
+                    }
+                }
+            } else if (secim == 2) {
+                graph = new GraphShow();
+                if (m.getDusman().get(0).getDusmanAdi() == "Gargamel") {
+                    String data2 = graph.Show(gargamel.getTilex() - 1, gargamel.getTiley() - 1, tembel.getTilex(), tembel.getTiley());
+                    boolean flag2 = false;
+                    int bas2 = 0, son2 = 0;
+                    if (data2 != null) {
+                        for (int i = 0; i < data2.length(); i++) {
+                            if (data2.charAt(i) == ' ' && flag2 == false) {
+                                flag2 = true;
+                                bas2 = i;
+
+                            } else if (data2.charAt(i) == ' ' && flag2 == true) {
+                                son2 = i;
+                                sub2 = data2.substring(bas2 + 1, son2);
+                                break;
+                            }
+                        }
+                    }
+
+                    int kucuk2 = Integer.parseInt(sub2);
+                    if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + gargamel.getTilex() - 1) == kucuk2 + 1) {
+                        gargamel.move(-1, 0);
+                        //System.out.println("gargamel yol = " + data2);
+                    }
+                    if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + (gargamel.getTilex() - 1)) == kucuk2 + m.getMap().get(0).length()) {
+                        //System.out.println("gargamel yol = " + data2);
+                        gargamel.move(0, -1);
+                    }
+                    if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + (gargamel.getTilex() - 1)) == kucuk2 - m.getMap().get(0).length()) {
+                        //System.out.println("gargamel yol = " + data2);
+                        gargamel.move(0, 1);
+                    }
+                    if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + gargamel.getTilex() - 1) == kucuk2 - 1) {
+                        //System.out.println("gargamel yol = " + data2);
+                        gargamel.move(1, 0);
+                    }
+                    if (tembel.getTilex() == gargamel.getTilex() - 1 && tembel.getTiley() == gargamel.getTiley() - 1) {
+                        tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() - gargamel.getGargamelPuanDususu());
+                        skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                        if (m.getDusman().size() <= 2) {
+                            if (m.getDusman().get(0).getDusmanAdi() == "Gargamel") {
+                                if (m.getDusman().get(0).getKapi() == 'A') {
+                                    gargamel.setTilex(aX);
+                                    gargamel.setTiley(aY);
+                                } else if (m.getDusman().get(0).getKapi() == 'B') {
+                                    gargamel.setTilex(bX);
+                                    gargamel.setTiley(bY);
+                                } else if (m.getDusman().get(0).getKapi() == 'C') {
+                                    gargamel.setTilex(cX);
+                                    gargamel.setTiley(cY);
+                                } else if (m.getDusman().get(0).getKapi() == 'D') {
+                                    gargamel.setTilex(dX);
+                                    gargamel.setTiley(dY);
+                                }
+                            }
+                        }
+                        if (m.getDusman().size() == 2) {
+                            if (m.getDusman().get(1).getDusmanAdi() == "Gargamel") {
+                                if (m.getDusman().get(1).getKapi() == 'A') {
+                                    gargamel.setTilex(aX);
+                                    gargamel.setTiley(aY);
+                                } else if (m.getDusman().get(1).getKapi() == 'B') {
+                                    gargamel.setTilex(bX);
+                                    gargamel.setTiley(bY);
+                                } else if (m.getDusman().get(1).getKapi() == 'C') {
+                                    gargamel.setTilex(cX);
+                                    gargamel.setTiley(cY);
+                                } else if (m.getDusman().get(1).getKapi() == 'D') {
+                                    gargamel.setTilex(dX);
+                                    gargamel.setTiley(dY);
+                                }
+                            }
+                        }
+                    }
+                    if (tembel.getTembelPuan().getPuan() <= 0) {
+                        secim = 4;
+                    }
+                    //ekmekarası
+
+                }
+                if (m.getDusman().size() == 2) {
+                    if (m.getDusman().get(1).getDusmanAdi() == "Gargamel") {
+                        String data2 = graph.Show(gargamel.getTilex() - 1, gargamel.getTiley() - 1, tembel.getTilex(), tembel.getTiley());
+                        boolean flag2 = false;
+                        int bas2 = 0, son2 = 0;
+                        if (data2 != null) {
+                            for (int i = 0; i < data2.length(); i++) {
+                                if (data2.charAt(i) == ' ' && flag2 == false) {
+                                    flag2 = true;
+                                    bas2 = i;
+
+                                } else if (data2.charAt(i) == ' ' && flag2 == true) {
+                                    son2 = i;
+                                    sub2 = data2.substring(bas2 + 1, son2);
+                                    break;
+                                }
+                            }
+                        }
+
+                        int kucuk2 = Integer.parseInt(sub2);
+                        if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + gargamel.getTilex() - 1) == kucuk2 + 1) {
+                            gargamel.move(-1, 0);
+                            //System.out.println("gargamel yol = " + data2);
+                        }
+                        if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + (gargamel.getTilex() - 1)) == kucuk2 + m.getMap().get(0).length()) {
+                            //System.out.println("gargamel yol = " + data2);
+                            gargamel.move(0, -1);
+                        }
+                        if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + (gargamel.getTilex() - 1)) == kucuk2 - m.getMap().get(0).length()) {
+                            //System.out.println("gargamel yol = " + data2);
+                            gargamel.move(0, 1);
+                        }
+                        if (((gargamel.getTiley() - 1) * m.getMap().get(0).length() + gargamel.getTilex() - 1) == kucuk2 - 1) {
+                            //System.out.println("gargamel yol = " + data2);
+                            gargamel.move(1, 0);
+                        }
+                        if (tembel.getTilex() == gargamel.getTilex() - 1 && tembel.getTiley() == gargamel.getTiley() - 1) {
+                            tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() - gargamel.getGargamelPuanDususu());
+                            skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                            if (m.getDusman().size() <= 2) {
+                                if (m.getDusman().get(0).getDusmanAdi() == "Gargamel") {
+                                    if (m.getDusman().get(0).getKapi() == 'A') {
+                                        gargamel.setTilex(aX);
+                                        gargamel.setTiley(aY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'B') {
+                                        gargamel.setTilex(bX);
+                                        gargamel.setTiley(bY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'C') {
+                                        gargamel.setTilex(cX);
+                                        gargamel.setTiley(cY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'D') {
+                                        gargamel.setTilex(dX);
+                                        gargamel.setTiley(dY);
+                                    }
+                                }
+                            }
+                            if (m.getDusman().size() == 2) {
+                                if (m.getDusman().get(1).getDusmanAdi() == "Gargamel") {
+                                    if (m.getDusman().get(1).getKapi() == 'A') {
+                                        gargamel.setTilex(aX);
+                                        gargamel.setTiley(aY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'B') {
+                                        gargamel.setTilex(bX);
+                                        gargamel.setTiley(bY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'C') {
+                                        gargamel.setTilex(cX);
+                                        gargamel.setTiley(cY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'D') {
+                                        gargamel.setTilex(dX);
+                                        gargamel.setTiley(dY);
+                                    }
+                                }
+                            }
+                        }
+                        if (tembel.getTembelPuan().getPuan() <= 0) {
+                            secim = 4;
+                        }
+                    }
+                }
+                if (m.getDusman().get(0).getDusmanAdi() == "Azman") {
+                    String data = graph.Show(azman.getTilex() - 1, azman.getTiley() - 1, tembel.getTilex(), tembel.getTiley());
+                    boolean flag = false;
+                    int bas = 0, son = 0;
+                    if (data != null) {
+                        for (int i = 0; i < data.length(); i++) {
+                            if (data.charAt(i) == ' ' && flag == false) {
+                                flag = true;
+                                bas = i;
+                            } else if (data.charAt(i) == ' ' && flag == true) {
+                                son = i;
+                                sub = data.substring(bas + 1, son);
+                                break;
+                            }
+                        }
+                    }
+                    //azman
+                    int kucuk = Integer.parseInt(sub);
+                    if (((azman.getTiley() - 1) * m.getMap().get(0).length() + azman.getTilex() - 1) == kucuk + 1) {
+                        azman.move(-1, 0);
+                    }
+                    if (((azman.getTiley() - 1) * m.getMap().get(0).length() + (azman.getTilex() - 1)) == kucuk + m.getMap().get(0).length()) {
+                        azman.move(0, -1);
+                    }
+                    if (((azman.getTiley() - 1) * m.getMap().get(0).length() + (azman.getTilex() - 1)) == kucuk - m.getMap().get(0).length()) {
+                        azman.move(0, 1);
+                    }
+                    if (((azman.getTiley() - 1) * m.getMap().get(0).length() + azman.getTilex() - 1) == kucuk - 1) {
+                        azman.move(1, 0);
+                    }
+
+                    if (tembel.getTilex() == azman.getTilex() - 1 && tembel.getTiley() == azman.getTiley() - 1) {
+                        tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() - azman.getAzmanPuanDususu());
+                        skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                        if (m.getDusman().size() <= 2) {
+                            if (m.getDusman().get(0).getDusmanAdi() == "Azman") {
+                                if (m.getDusman().get(0).getKapi() == 'A') {
+                                    azman.setTilex(aX);
+                                    azman.setTiley(aY);
+                                } else if (m.getDusman().get(0).getKapi() == 'B') {
+                                    azman.setTilex(bX);
+                                    azman.setTiley(bY);
+                                } else if (m.getDusman().get(0).getKapi() == 'C') {
+                                    azman.setTilex(cX);
+                                    azman.setTiley(cY);
+                                } else if (m.getDusman().get(0).getKapi() == 'D') {
+                                    azman.setTilex(dX);
+                                    azman.setTiley(dY);
+                                }
+
+                            }
+                        }
+                        if (m.getDusman().size() == 2) {
+                            if (m.getDusman().get(1).getDusmanAdi() == "Azman") {
+                                if (m.getDusman().get(1).getKapi() == 'A') {
+                                    azman.setTilex(aX);
+                                    azman.setTiley(aY);
+                                } else if (m.getDusman().get(1).getKapi() == 'B') {
+                                    azman.setTilex(bX);
+                                    azman.setTiley(bY);
+                                } else if (m.getDusman().get(1).getKapi() == 'C') {
+                                    azman.setTilex(cX);
+                                    azman.setTiley(cY);
+                                } else if (m.getDusman().get(1).getKapi() == 'D') {
+                                    azman.setTilex(dX);
+                                    azman.setTiley(dY);
+                                }
+                            }
+                        }
+                    }
+                    if (tembel.getTembelPuan().getPuan() <= 0) {
+                        secim = 4;
+                    }
+                }
+                if (m.getDusman().size() == 2) {
+                    if (m.getDusman().get(1).getDusmanAdi() == "Azman") {
+                        String data = graph.Show(azman.getTilex() - 1, azman.getTiley() - 1, tembel.getTilex(), tembel.getTiley());
+                        boolean flag = false;
+                        int bas = 0, son = 0;
+                        if (data != null) {
+                            for (int i = 0; i < data.length(); i++) {
+                                if (data.charAt(i) == ' ' && flag == false) {
+                                    flag = true;
+                                    bas = i;
+                                } else if (data.charAt(i) == ' ' && flag == true) {
+                                    son = i;
+                                    sub = data.substring(bas + 1, son);
+                                    break;
+                                }
+                            }
+                        }
+                        //azman
+                        int kucuk = Integer.parseInt(sub);
+                        if (((azman.getTiley() - 1) * m.getMap().get(0).length() + azman.getTilex() - 1) == kucuk + 1) {
+                            azman.move(-1, 0);
+                        }
+                        if (((azman.getTiley() - 1) * m.getMap().get(0).length() + (azman.getTilex() - 1)) == kucuk + m.getMap().get(0).length()) {
+                            azman.move(0, -1);
+                        }
+                        if (((azman.getTiley() - 1) * m.getMap().get(0).length() + (azman.getTilex() - 1)) == kucuk - m.getMap().get(0).length()) {
+                            azman.move(0, 1);
+                        }
+                        if (((azman.getTiley() - 1) * m.getMap().get(0).length() + azman.getTilex() - 1) == kucuk - 1) {
+                            azman.move(1, 0);
+                        }
+
+                        if (tembel.getTilex() == azman.getTilex() - 1 && tembel.getTiley() == azman.getTiley() - 1) {
+                            tembel.getTembelPuan().setPuan(tembel.getTembelPuan().getPuan() - azman.getAzmanPuanDususu());
+                            skorgosteren.setText("PUAN: " + tembel.getTembelPuan().getPuan());
+                            if (m.getDusman().size() <= 2) {
+                                if (m.getDusman().get(0).getDusmanAdi() == "Azman") {
+                                    if (m.getDusman().get(0).getKapi() == 'A') {
+                                        azman.setTilex(aX);
+                                        azman.setTiley(aY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'B') {
+                                        azman.setTilex(bX);
+                                        azman.setTiley(bY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'C') {
+                                        azman.setTilex(cX);
+                                        azman.setTiley(cY);
+                                    } else if (m.getDusman().get(0).getKapi() == 'D') {
+                                        azman.setTilex(dX);
+                                        azman.setTiley(dY);
+                                    }
+
+                                }
+                            }
+                            if (m.getDusman().size() == 2) {
+                                if (m.getDusman().get(1).getDusmanAdi() == "Azman") {
+                                    if (m.getDusman().get(1).getKapi() == 'A') {
+                                        azman.setTilex(aX);
+                                        azman.setTiley(aY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'B') {
+                                        azman.setTilex(bX);
+                                        azman.setTiley(bY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'C') {
+                                        azman.setTilex(cX);
+                                        azman.setTiley(cY);
+                                    } else if (m.getDusman().get(1).getKapi() == 'D') {
+                                        azman.setTilex(dX);
+                                        azman.setTiley(dY);
+                                    }
+                                }
+                            }
+                        }
+                        if (tembel.getTembelPuan().getPuan() <= 0) {
+                            secim = 4;
+                        }
+                    }
+                }
+
+                if (keycode == KeyEvent.VK_W) {
+                    if (m.getMap(tembel.getTilex(), tembel.getTiley() - 1) != '0') {
+                        tembel.move(0, -1);
+                    }
+                }
+                if (keycode == KeyEvent.VK_D) {
+                    if (m.getMap(tembel.getTilex() + 1, tembel.getTiley()) != '0') {
+                        tembel.move(1, 0);
+                    }
+                }
+                if (keycode == KeyEvent.VK_S) {
+                    if (m.getMap(tembel.getTilex(), tembel.getTiley() + 1) != '0') {
+                        tembel.move(0, 1);
+                    }
+                }
+                if (keycode == KeyEvent.VK_A) {
+                    if (m.getMap(tembel.getTilex() - 1, tembel.getTiley()) != '0') {
+                        tembel.move(-1, 0);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+    }
+
+    public int getSecim() {
+        return secim;
+    }
+
+    public void setSecim(int secim) {
+        this.secim = secim;
+    }
+
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+public class Dusman extends Karakter {
+    private int dusmanID;
+    private String dusmanAdi, dusmanTur;
+    private char kapi;
+    public Dusman() {
+       
+    }
+
+    public Dusman(int dusmanID, String dusmanAdi, String dusmanTur, char kapi) {
+        this.dusmanID = dusmanID;
+        this.dusmanAdi = dusmanAdi;
+        this.dusmanTur = dusmanTur;
+        this.kapi = kapi;
+    }
+    
+    public int getDusmanID() {
+        return dusmanID;
+    }
+
+    public void setDusmanID(int dusmanID) {
+        this.dusmanID = dusmanID;
+    }
+
+    public String getDusmanAdi() {
+        return dusmanAdi;
+    }
+
+    public void setDusmanAdi(String dusmanAdi) {
+        this.dusmanAdi = dusmanAdi;
+    }
+
+    public String getDusmanTur() {
+        return dusmanTur;
+    }
+
+    public void setDusmanTur(String dusmanTur) {
+        this.dusmanTur = dusmanTur;
+    }
+
+    public char getKapi() {
+        return kapi;
+    }
+
+    public void setKapi(char kapi) {
+        this.kapi = kapi;
+    }
+
+    public Lokasyon getLok() {
+        return lok;
+    }
+
+    public void setLok(Lokasyon lok) {
+        this.lok = lok;
+    }
+    
+
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+
+public class EdgeWeighted {
+    NodeWeighted source;
+    NodeWeighted destination;
+    double weight;
+
+    EdgeWeighted(NodeWeighted s, NodeWeighted d, double w) {
+       
+        source = s;
+        destination = d;
+        weight = w;
+    }
+
+    public String toString() {
+    return String.format("(%s -> %s, %f)", source.name, destination.name, weight);
+}
+
+    
+    public int compareTo(EdgeWeighted otherEdge) {
+
+   
+    if (this.weight > otherEdge.weight) {
+        return 1;
+    }
+    else return -1;
+}
+
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
+public class Gargamel extends Dusman {
+
+    private Image ima;
+    private int x, y;
+    private int gargamelPuanDususu = 15;
+    private Timer t;
+
+    public Gargamel() {
+        t = new Timer();
+        ImageIcon imgg = new ImageIcon("gargamel.png");
+        ima = imgg.getImage();
+//        System.out.println("gargaeml oluştu");
+        tilex = 3;
+        tiley = 0;
+
+        x = tilex * 55;
+        y = tiley * 55;
+
+    }
+
+    public int getGargamelPuanDususu() {
+        return gargamelPuanDususu;
+    }
+
+    public void setGargamelPuanDususu(int gargamelPuanDususu) {
+        this.gargamelPuanDususu = gargamelPuanDususu;
+    }
+
+    public Image getIma() {
+        return ima;
+    }
+
+    public void setIma(Image ima) {
+        this.ima = ima;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getTilex() {
+        return tilex;
+    }
+
+    public void setTilex(int tilex) {
+        this.tilex = tilex;
+    }
+
+    public int getTiley() {
+        return tiley;
+    }
+
+    public void setTiley(int tiley) {
+        this.tiley = tiley;
+    }
+
+    public Timer getT() {
+        return t;
+    }
+
+    public void setT(Timer t) {
+        this.t = t;
+    }
+
+  
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
+
+public class GozlukluSirin extends Oyuncu{
+    private Image im;
+    private int x,y;
+    private Map m;
+    private String OyuncuAdi;
+    private int oyuncuID;
+    private String oyuncuTur;
+    private Puan gozlukluPuan;
+    public GozlukluSirin(){
+       m = new Map();
+       gozlukluPuan = new Puan();
+       ImageIcon img = new ImageIcon("gozluklu_sirin.png"); 
+       im = img.getImage();
+    
+       tilex = (m.getMap().get(0).length()/2);
+       tiley = (m.getMap().size()/2);
+       
+       
+    
+    }
+
+    public Image getIm() {
+        return im;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getTilex() {
+        return tilex;
+    }
+
+    public int getTiley() {
+        return tiley;
+    }
+    
+    public Puan getGozlukluPuan() {
+        return gozlukluPuan;
+    }
+
+    public Map getM() {
+        return m;
+    }
+
+    public void setM(Map m) {
+        this.m = m;
+    }
+
+    @Override
+    public String getOyuncuAdi() {
+        return OyuncuAdi;
+    }
+
+    @Override
+    public void setOyuncuAdi(String OyuncuAdi) {
+        this.OyuncuAdi = OyuncuAdi;
+    }
+
+    @Override
+    public int getOyuncuID() {
+        return oyuncuID;
+    }
+
+    @Override
+    public void setOyuncuID(int oyuncuID) {
+        this.oyuncuID = oyuncuID;
+    }
+
+    @Override
+    public String getOyuncuTur() {
+        return oyuncuTur;
+    }
+
+    @Override
+    public void setOyuncuTur(String oyuncuTur) {
+        this.oyuncuTur = oyuncuTur;
+    }
+    
+    public void setGozlukluPuan(Puan gozlukluPuan) {
+        this.gozlukluPuan = gozlukluPuan;
+    }
+    
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+import static java.lang.invoke.MethodHandles.zero;
+
+
+public class GraphShow {
+    //noda ekleme
+    private Map m;
+    NodeWeighted []nodeweight;
+    GraphWeighted graphWeighted;
+    public GraphShow(){
+        graphWeighted = new GraphWeighted(true);
+        m = new Map();
+        int size = m.getMap().size()*m.getMap().get(0).length();
+        nodeweight = new NodeWeighted[size];
+        int xekseni = m.getMap().get(0).length();
+        int yekseni = m.getMap().size();
+        int k=0;
+        for(int i=0; i<yekseni; i++,k++){
+            for(int j=0; j<xekseni; j++,k++){
+                int indx = xekseni*i+j;
+                nodeweight[indx] = new NodeWeighted(indx, Integer.toString(indx));
+            }
+        }
+        //yollar arası masrafi hesaplama
+        // ilk once yan yana olanlar
+        int indx = 0;
+        for(int y = 0; y < yekseni; y++){
+            for(int x = 0; x + 1< xekseni; x++){
+                indx = xekseni*y + x;
+                if(m.getMap(x, y) == '1' && m.getMap(x+1, y) == '1'){
+                    graphWeighted.addEdge(nodeweight[indx], nodeweight[indx+1], 1);
+                }
+                
+            }
+        }
+        indx = 0;
+        for(int y = 0; y < yekseni; y++){
+            for(int x = xekseni-1; x - 1 >= 0; x--){
+                indx = xekseni*y + x;
+                if(m.getMap(x, y) == '1' && m.getMap(x-1, y) == '1'){
+                    graphWeighted.addEdge(nodeweight[indx], nodeweight[indx-1], 1);
+                }
+                
+            }
+        }
+        indx = 0;
+        for(int x = 0; x < xekseni; x++){
+            for(int y = 0; y+1 < yekseni; y++){
+                indx = xekseni*y + x;
+                if(m.getMap(x, y) == '1' && m.getMap(x, y+1) == '1'){
+                    graphWeighted.addEdge(nodeweight[indx], nodeweight[indx+xekseni], 1);
+                }
+            }
+        }
+        indx = 0;
+        for(int x = 0; x < xekseni; x++){
+            for(int y = yekseni-1; y-1 >= 0; y--){
+                indx = xekseni*y + x;
+                if(m.getMap(x, y) == '1' && m.getMap(x, y-1) == '1'){
+                    graphWeighted.addEdge(nodeweight[indx], nodeweight[indx-xekseni], 1);
+                }
+            }
+        }
+        
+    }
+    
+    public String Show(int dusmanx,int dusmany,int kahramnx,int kahramany){
+        return graphWeighted.DijkstraShortestPath(nodeweight[dusmany*m.getMap().get(0).length()+dusmanx],nodeweight[kahramany*m.getMap().get(0).length()+kahramnx]);
+        
+    }
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
+
+public class GraphWeighted {
+    private Set<NodeWeighted> nodes;
+    private boolean directed;
+    
+
+    GraphWeighted(boolean directed) {
+        this.directed = directed;
+        nodes = new HashSet<>();
+    }
+    
+    
+    public void addNode(NodeWeighted... n) {
+    
+    nodes.addAll(Arrays.asList(n));
+    }
+
+    public void addEdge(NodeWeighted source, NodeWeighted destination, double weight) {
+    
+    nodes.add(source);
+    nodes.add(destination);
+
+    
+    addEdgeHelper(source, destination, weight);
+
+    if (!directed && source != destination) {
+        addEdgeHelper(destination, source, weight);
+    }
+}
+
+    private void addEdgeHelper(NodeWeighted a, NodeWeighted b, double weight) {
+   
+    for (EdgeWeighted edge : a.edges) {
+        if (edge.source == a && edge.destination == b) {
+           
+            edge.weight = weight;
+            return;
+        }
+    }
+ 
+    a.edges.add(new EdgeWeighted(a, b, weight));
+    }
+
+    public void printEdges() {
+    for (NodeWeighted node : nodes) {
+        LinkedList<EdgeWeighted> edges = node.edges;
+
+        if (edges.isEmpty()) {
+
+            continue;
+        }
+
+
+        for (EdgeWeighted edge : edges) {
+
+        }
+
+    }
+    }
+    public boolean hasEdge(NodeWeighted source, NodeWeighted destination) {
+    LinkedList<EdgeWeighted> edges = source.edges;
+    for (EdgeWeighted edge : edges) {
+       
+        if (edge.destination == destination) {
+            return true;
+        }
+    }
+    return false;
+}
+    public void resetNodesVisited() {
+    for (NodeWeighted node : nodes) {
+        node.unvisit();
+    }
+    }
+    public String DijkstraShortestPath(NodeWeighted start, NodeWeighted end) {
+   
+    HashMap<NodeWeighted, NodeWeighted> changedAt = new HashMap<>();
+    changedAt.put(start, null);
+
+    
+    HashMap<NodeWeighted, Double> shortestPathMap = new HashMap<>();
+
+   
+    for (NodeWeighted node : nodes) {
+        if (node == start)
+            shortestPathMap.put(start, 0.0);
+        else shortestPathMap.put(node, Double.POSITIVE_INFINITY);
+    }
+
+    
+    for (EdgeWeighted edge : start.edges) {
+        shortestPathMap.put(edge.destination, edge.weight);
+        changedAt.put(edge.destination, start);
+    }
+
+    start.visit();
+
+   
+    while (true) {
+        NodeWeighted currentNode = closestReachableUnvisited(shortestPathMap);
+        
+        if (currentNode == null) {
+            //System.out.println("There isn't a path between " + start.name + " and " + end.name);
+            return null;
+        }
+
+       
+        if (currentNode == end) {
+
+
+            NodeWeighted child = end;
+
+           
+            String path = end.name;
+            while (true) {
+                NodeWeighted parent = changedAt.get(child);
+                if (parent == null) {
+
+                    return path;
+                }
+
+                
+                path = parent.name + " " + path;
+                child = parent;
+            }
+
+        }
+        currentNode.visit();
+
+        
+        for (EdgeWeighted edge : currentNode.edges) {
+            if (edge.destination.isVisited())
+                continue;
+
+            if (shortestPathMap.get(currentNode)
+               + edge.weight
+               < shortestPathMap.get(edge.destination)) {
+                shortestPathMap.put(edge.destination,
+                                   shortestPathMap.get(currentNode) + edge.weight);
+                changedAt.put(edge.destination, currentNode);
+            }
+        }
+    }
+    }
+    private NodeWeighted closestReachableUnvisited(HashMap<NodeWeighted, Double> shortestPathMap) {
+
+    double shortestDistance = Double.POSITIVE_INFINITY;
+    NodeWeighted closestReachableNode = null;
+    for (NodeWeighted node : nodes) {
+        if (node.isVisited())
+            continue;
+
+        double currentDistance = shortestPathMap.get(node);
+        if (currentDistance == Double.POSITIVE_INFINITY)
+            continue;
+
+        if (currentDistance < shortestDistance) {
+            shortestDistance = currentDistance;
+            closestReachableNode = node;
+        }
+    }
+    return closestReachableNode;
+    }
+   
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+
+public abstract class Karakter {
+    private String Ad;
+    private String ID;
+    private String Tur;
+    public Lokasyon lok;
+    public int tilex,tiley;
+    public void move(int dx, int dy){        
+        tilex += dx;
+        tiley += dy;
+    }
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+
+public class Lokasyon{
+    private int x;
+    private int y;
+
+    public Lokasyon(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Lokasyon() {
+    }
+    
+    
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+    
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+
+public class Main extends Thread {
+    
+   
+    private boolean sayimi = false;
+    private int secim=0;
+    private JButton karakterSecimi1;
+    private JButton karakterSecimi2;
+    private Board board;
+    private JLabel karakterSecimiSorusu;
+    public Main() {
+       JFrame f = new JFrame();
+       
+       f.setTitle("Sirinler Oyunu");
+       karakterSecimiSorusu = new JLabel("Hangi karakterle oynamak istersiniz");
+       karakterSecimiSorusu.setBounds(375, 200, 250, 100);
+       f.add(karakterSecimiSorusu);
+       karakterSecimi1 = new JButton("Gozluklu Sirin");
+       karakterSecimi1.setBounds(300, 350, 200, 100);
+       karakterSecimi2 = new JButton("Tembel Sirin");
+       karakterSecimi2.setBounds(500, 350, 200, 100);
+       board = new Board();
+       board.setVisible(false);
+       
+       karakterSecimi1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                secim = 1;
+                karakterSecimiSorusu.setVisible(false);
+                karakterSecimi1.setVisible(false);
+                karakterSecimi2.setVisible(false);
+                
+                board.setSecim(secim);
+                board.setVisible(true);   
+                
+            }
+        });
+        karakterSecimi2.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                secim = 2;
+                karakterSecimiSorusu.setVisible(false);
+                karakterSecimi1.setVisible(false);
+                karakterSecimi2.setVisible(false);
+                board.setSecim(secim);
+                board.setVisible(true);
+            }
+        });
+       f.add(karakterSecimi1);
+       f.add(karakterSecimi2);
+       f.setSize(1000,1000);
+       f.setResizable(false);
+       f.setLocationRelativeTo(null);
+       
+       f.add(board);
+       f.setVisible(true);
+       f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      
+    
+
+    }
+    
+    public static void main(String[] args) {
+        new Main();
+       
+       
+    }
+}
+
+-----------------------------------------------------------------------------------------------
+package lab;
+
+import java.awt.Image;
+import java.util.TimerTask;
+import javax.swing.ImageIcon;
+
+
+
+public class Mantar extends Obje{
+    private Image im;
+    private int x,y,tilex,tiley;
+    private int mantarSayisi;
+    private int mantarDegeri=50;
+
+    public int getMantarDegeri() {
+        return mantarDegeri;
+    }
+
+    public void setMantarDegeri(int mantarDegeri) {
+        this.mantarDegeri = mantarDegeri;
+    }
+
+    public int getAltinSayisi() {
+        return altinSayisi;
+    }
+
+    public void setAltinSayisi(int altinSayisi) {
+        this.altinSayisi = altinSayisi;
+    }
+    public int getMantarSayisi() {
+        return mantarSayisi;
+    }
+
+    public void setMantarSayisi(int altinSayisi) {
+        this.mantarSayisi = altinSayisi;
+    }
+    private int altinSayisi = 5;
+    public Mantar() {
+       ImageIcon img = new ImageIcon("mantar.png"); 
+       im = img.getImage();
+       tilex = 6;
+       tiley = 5;
+       
+    }
+   
+
+    public Image getIm() {
+        return im;
+    }
+
+    public void setIm(Image im) {
+        this.im = im;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getTilex() {
+        return tilex;
+    }
+
+    public void setTilex(int tilex) {
+        this.tilex = tilex;
+    }
+
+    public int getTiley() {
+        return tiley;
+    }
+
+    public void setTiley(int tiley) {
+        this.tiley = tiley;
+    }
+    
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+import java.awt.Image;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+
+public class Map {
+    private Scanner sc;
+    private ArrayList<String> Map;
+    private ArrayList<Dusman> dusman;
+    private int[][] map2;
+    private Image beyaz;
+    private Image siyah;
+    private Image a;
+    private Image b;
+    private Image c;
+    private Image d;
+    private Image s;
+    private Image mavi_kutu;
+    public Map(){
+        ImageIcon img = new ImageIcon("beyaz_kutu.png");
+        beyaz = img.getImage();
+        ImageIcon img2 = new ImageIcon("cobble.png");
+        siyah = img2.getImage();
+        ImageIcon img3 = new ImageIcon("A.png");
+        a = img3.getImage();
+        ImageIcon img4 = new ImageIcon("B.png");
+        b = img4.getImage();
+        ImageIcon img5 = new ImageIcon("C.png");
+        c = img5.getImage();
+        ImageIcon img6 = new ImageIcon("D.png");
+        d = img6.getImage();
+        ImageIcon img7 = new ImageIcon("Sirine.png");
+        s = img7.getImage();
+        ImageIcon img8 = new ImageIcon("mavi_kutu.png");
+        mavi_kutu=img8.getImage();
+        Map = new ArrayList<>();
+        dusman = new ArrayList<>();
+        openFile();
+        readFile();
+        closeFile();
+    }
+
+    public Image getMavi_kutu() {
+        return mavi_kutu;
+    }
+
+    public void setMavi_kutu(Image mavi_kutu) {
+        this.mavi_kutu = mavi_kutu;
+    }
+    public Image getBeyaz() {
+        return beyaz;
+    }
+
+    public Image getSiyah() {
+        return siyah;
+    }
+    public Image getA() {
+        return a;
+    }
+    public Image getB() {
+        return b;
+    }
+    public Image getC() {
+        return c;
+    }
+    public Image getD() {
+        return d;
+    }
+    public Image getS() {
+        return s;
+    }
+    
+    public char getMap(int x, int y){
+      char indx = Map.get(y).charAt(x);
+      return indx;
+      
+    }
+    
+    public void openFile(){
+        try{
+             sc = new Scanner(new File("harita.txt"));
+        }catch(Exception e){
+            System.out.println("hata");
+        }
+       
+      
+    }
+    
+    public void readFile(){
+         try{
+            int k = 0;
+            int id = 0;
+            while(sc.hasNextLine()){
+                String veri = sc.nextLine();
+                veri.trim();
+                veri = veri.replaceAll("\\s", ""); 
+                if(veri.contains("Karakter:Gargamel,Kapi:A")){
+                        dusman.add(new Dusman(id, "Gargamel", "Gargamel",'A'));
+                        id++;
+                        continue;
+                    }
+                    if(veri.contains("Karakter:Gargamel,Kapi:B")){
+                        dusman.add(new Dusman(id, "Gargamel", "Gargamel",'B'));
+                        id++;
+                        continue;
+                    }
+                    if(veri.contains("Karakter:Gargamel,Kapi:C")){
+                        dusman.add(new Dusman(id, "Gargamel", "Gargamel",'C'));
+                        id++;
+                        continue;
+                    }
+                    if(veri.contains("Karakter:Gargamel,Kapi:D")){
+                        dusman.add(new Dusman(id, "Gargamel", "Gargamel",'D'));
+                        id++;
+                        continue;
+                    }
+                    if(veri.contains("Karakter:Azman,Kapi:A")){
+                        dusman.add(new Dusman(id, "Azman", "Azman", 'A'));
+                        id++;
+                        continue;
+                    }
+                    if(veri.contains("Karakter:Azman,Kapi:B")){
+                        dusman.add(new Dusman(id, "Azman", "Azman", 'B'));
+                        id++;
+                        continue;
+                    }
+                    if(veri.contains("Karakter:Azman,Kapi:C")){
+                        dusman.add(new Dusman(id, "Azman", "Azman", 'C'));
+                        id++;
+                        continue;
+                    }
+                    if(veri.contains("Karakter:Azman,Kapi:D")){
+                        dusman.add(new Dusman(id, "Azman", "Azman", 'D'));
+                        id++;
+                        continue;
+                    }
+                for(int i=0; i<veri.length(); i++){
+                    if(Character.isDigit(veri.charAt(0))){
+                        Map.add(veri);
+                        break;
+                    }
+                }   
+                    
+                                
+                
+            }
+        }catch(Exception e){
+            System.out.println("hata2");
+        }
+    /*
+        for(int i=0; i<Map.size(); i++){
+            //System.out.println(Map.get(i).length());
+//            System.out.println(Map.get(i));
+        }
+      */  
+        map2 = new int[Map.size()][Map.get(0).length()];
+        for(int i=0; i<Map.size(); i++){
+            for(int j=0; j<Map.get(i).length(); j++){
+                map2[i][j] = Character.getNumericValue(Map.get(i).charAt(j));
+            }
+        }
+        
+        /*
+        for(int i=0; i<Map.size(); i++){
+            for(int j=0; j<Map.get(i).length(); j++){
+//                System.out.print(map2[i][j]);
+            }
+//            System.out.println("");
+        }
+        */
+        /*
+        for(int i=0; i<dusman.size(); i++){
+//            System.out.println(dusman.get(i).getDusmanAdi()+" girdiği kapi: "+dusman.get(i).getKapi());
+        }
+        */
+    
+    }
+    
+    public void closeFile(){
+        sc.close();
+    }
+
+   
+
+    public ArrayList<String> getMap() {
+        return Map;
+    }
+    public ArrayList<Dusman> getDusman() {
+        return dusman;
+    }
+
+    public void setDusman(ArrayList<Dusman> dusman) {
+        this.dusman = dusman;
+    }
+    
+    
+    
+    
+   
+
+
+
+
+    
+}
+
+-----------------------------------------------------------------------------------------------
+
+package lab;
+
+import java.util.LinkedList;
+
+
+public class NodeWeighted {
+    
+    int n;
+    String name;
+    private boolean visited;
+    LinkedList<EdgeWeighted> edges;
+
+    NodeWeighted(int n, String name) {
+        this.n = n;
+        this.name = name;
+        visited = false;
+        edges = new LinkedList<>();
+    }
+
+    boolean isVisited() {
+        return visited;
+    }
+
+    void visit() {
+        visited = true;
+    }
+
+    void unvisit() {
+        visited = false;
+    }
+}
+
+-----------------------------------------------------------------------------------------------
+
+
+package lab;
+
+
+public class Obje {
+}
+
+
+-----------------------------------------------------------------------------------------------
+
+
+package lab;
+
+
+public class Oyuncu extends Karakter{
+    private String oyuncuAdi;
+    private String oyuncuTur;
+    private int oyuncuID;
+    private int oyunucuPuani;
+    public Oyuncu(){
+        setOyunucuPuani(20);
+    }
+    public void oyuncuPuaniGoster(){
+        
+    }
+
+    public String getOyuncuAdi() {
+        return oyuncuAdi;
+    }
+
+    public void setOyuncuAdi(String oyuncuAdi) {
+        this.oyuncuAdi = oyuncuAdi;
+    }
+
+    public String getOyuncuTur() {
+        return oyuncuTur;
+    }
+
+    public void setOyuncuTur(String oyuncuTur) {
+        this.oyuncuTur = oyuncuTur;
+    }
+
+    public int getOyuncuID() {
+        return oyuncuID;
+    }
+
+    public void setOyuncuID(int oyuncuID) {
+        this.oyuncuID = oyuncuID;
+    }
+
+    public int getOyunucuPuani() {
+        return oyunucuPuani;
+    }
+
+    public void setOyunucuPuani(int oyunucuPuani) {
+        this.oyunucuPuani = oyunucuPuani;
+    }
+
+
+}
+
+-----------------------------------------------------------------------------------------------
+
+
+
+package lab;
+
+
+public class Puan extends Oyuncu{
+    private int puan;
+    public Puan(){
+        puan = 20;
+    }
+    
+    public int PuaniGoster(TembelSirin ts) {
+        return puan;
+    }
+    public int PuaniGoster(GozlukluSirin gs) {
+        return puan;
+    }
+
+    public int getPuan() {
+        return puan;
+    }
+
+    public void setPuan(int puan) {
+        this.puan = puan;
+    }
+    
+    
+}
+
+-----------------------------------------------------------------------------------------------
+
+
+
+package lab;
+
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
+
+public class TembelSirin extends Oyuncu{
+    
+
+
+
+
+    private Image im;
+    private int x,y;
+    private String OyuncuAdi;
+    private int oyuncuID;
+    private Map m;
+    private String oyuncuTur;
+    private Puan tembelPuan;
+    public TembelSirin(){
+        m = new Map();
+       tembelPuan = new Puan();
+       ImageIcon img = new ImageIcon("Tembel_Sirin.png"); 
+       im = img.getImage();
+    
+       tilex = (m.getMap().get(0).length()/2);
+       tiley = (m.getMap().size()/2);
+       
+       
+    
+    }
+
+    public String getOyuncuAdi() {
+        return OyuncuAdi;
+    }
+
+    public void setOyuncuAdi(String OyuncuAdi) {
+        this.OyuncuAdi = OyuncuAdi;
+    }
+
+    public int getOyuncuID() {
+        return oyuncuID;
+    }
+
+    public void setOyuncuID(int oyuncuID) {
+        this.oyuncuID = oyuncuID;
+    }
+
+    public String getOyuncuTur() {
+        return oyuncuTur;
+    }
+
+    public void setOyuncuTur(String oyuncuTur) {
+        this.oyuncuTur = oyuncuTur;
+    }
+
+    public Puan getTembelPuan() {
+        return tembelPuan;
+    }
+
+    public void setTembelPuan(Puan tembelPuan) {
+        this.tembelPuan = tembelPuan;
+    }
+    
+
+    public Image getIm() {
+        return im;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getTilex() {
+        return tilex;
+    }
+
+    public int getTiley() {
+        return tiley;
+    }
+    
+    public Map getM() {
+        return m;
+    }
+
+    public void setM(Map m) {
+        this.m = m;
+    }
+
+}
+
+
+
+
