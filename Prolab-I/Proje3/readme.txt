@@ -1,0 +1,1 @@
+Hiçbir sorun yoktu diye hatırlıyorum sanırım 100 almıştık.

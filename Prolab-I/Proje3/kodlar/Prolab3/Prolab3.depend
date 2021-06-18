@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1609412157 source:c:\users\furka\documents\c projects\prolab3\main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<ctype.h>
+	<string.h>
+
